@@ -2,6 +2,10 @@ require 'hipchat'
 
 module Hipchat
   class Exporter
+    def self.root_path
+      File.expand_path('../..', __dir__)
+    end
+
     def initialize(api_token)
       @client = ::HipChat::Client.new(api_token)
     end
