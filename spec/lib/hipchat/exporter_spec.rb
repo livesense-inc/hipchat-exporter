@@ -42,4 +42,33 @@ describe HipChat::Exporter do
       expect(json['items'].count < HipChat::Exporter::MAX_RESULTS).to be_truthy
     end
   end
+
+  describe '#result_hash_from' do
+    let(:message_date1) { '2018-01-01T01:23:45.123456+00:00' }
+    let(:message_date2) { '2018-02-14T01:23:45.123456+00:00' }
+
+    let(:message1) { { "date": message_date1, "message": "foo", "type": "message" } }
+    let(:message2) { { "date": message_date2, "message": "bar", "type": "message" } }
+
+    let(:response_body) {
+      {
+        items: [
+          message1,
+          message2,
+        ]
+      }.to_json
+    }
+
+    subject { exporter.result_hash_from(response_body, expected_count: expected_count) }
+
+    context 'When messages count == expected_count' do
+      let(:expected_count) { 2 }
+      it { is_expected.to eq({ next: true, next_date_offset: message_date1 }) }
+    end
+
+    context 'When messages count < expected_count' do
+      let(:expected_count) { 3 }
+      it { is_expected.to eq({ next: false, next_date_offset: nil }) }
+    end
+  end
 end

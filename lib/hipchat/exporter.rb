@@ -28,7 +28,7 @@ module HipChat
         file.write(response_body)
       end
 
-      room_history_file_path
+      result_hash_from(response_body)
     end
 
     def fetch_room_history(room_id_or_name, from: nil, to: 'recent')
@@ -54,6 +54,16 @@ module HipChat
         File.join(HipChat::Exporter.root_path, "spec/tmp/rooms/#{room_id_or_name}/history_#{timestamp}.json")
       else
         File.join(HipChat::Exporter.root_path, "tmp/rooms/#{room_id_or_name}/history_#{timestamp}.json")
+      end
+    end
+
+    def result_hash_from(response_body, expected_count: HipChat::Exporter::MAX_RESULTS)
+      json = JSON.parse(response_body)
+
+      if json['items'].count == expected_count
+        { next: true, next_date_offset: json['items'].first['date'] }
+      else
+        { next: false, next_date_offset: nil }
       end
     end
   end
