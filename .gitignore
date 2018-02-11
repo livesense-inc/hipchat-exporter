@@ -6,3 +6,5 @@
 
 /.bundle/
 /vendor/
+
+.env

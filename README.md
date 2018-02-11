@@ -20,6 +20,12 @@ cd hipchat-exporter
 bundle install --path vendor/bundle
 ```
 
+```
+cp .env.sample .env
+```
+
+Fill `HIPCHAT_TOKEN` in `.env`
+
 ## Testing
 
 ```
