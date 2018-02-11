@@ -13,7 +13,7 @@ module HipChat
     end
 
     def create_room_history_file(room_id_or_name, from: nil, to: nil)
-      timestamp = to.respond_to?(:to_i) ? to.to_i : Time.current.to_i
+      timestamp = timestamp_from(to)
 
       room_history_file_path = room_history_file_path(
         room_id_or_name: room_id_or_name,
@@ -47,6 +47,14 @@ module HipChat
         date: to,
         :'end-date' => from,
       )
+    end
+
+    def timestamp_from(time)
+      begin
+        Time.zone.parse(time.to_s).to_i
+      rescue
+        Time.current.to_i
+      end
     end
 
     def room_history_file_path(room_id_or_name:, timestamp:)

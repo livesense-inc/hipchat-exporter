@@ -22,7 +22,7 @@ describe HipChat::Exporter do
       FileUtils.rm_r(room_history_dir) if File.exist?(room_history_dir)
     end
 
-    it 'Create room history JSON file' do
+    it 'create room history JSON file' do
       expect {
         exporter.create_room_history_file(room_id_example, from: from, to: to)
       }.to change { Dir.glob("#{room_history_dir}/*").size }.by(1)
@@ -34,12 +34,31 @@ describe HipChat::Exporter do
     let(:from) { Time.zone.local(2018, 1, 1) }
     let(:to) { Time.zone.local(2018, 1, 2) }
 
-    it 'Get JSON response body' do
+    it 'get JSON response body' do
       response_body = exporter.fetch_room_history(room_id_example, from: from, to: to)
       json = JSON.parse(response_body)
 
       expect(json['items']).to be_present
       expect(json['items'].count < HipChat::Exporter::MAX_RESULTS).to be_truthy
+    end
+  end
+
+  describe '#timezone_from' do
+    subject { exporter.timestamp_from(time) }
+
+    context 'when time class is Time (or TimeWithZone)' do
+      let(:time) { Time.zone.local(2018, 2, 1) }
+      it { is_expected.to eq 1517410800 }
+    end
+
+    context 'when time class is String' do
+      let(:time) { '2018-01-01T01:23:45.123456+00:00' }
+      it { is_expected.to eq 1514769825 }
+    end
+
+    context 'when time is nil' do
+      let(:time) { nil }
+      it { expect(exporter.timestamp_from(time).to_s).to match(/\A\d+\z/) }
     end
   end
 
@@ -61,12 +80,12 @@ describe HipChat::Exporter do
 
     subject { exporter.result_hash_from(response_body, expected_count: expected_count) }
 
-    context 'When messages count == expected_count' do
+    context 'when messages count == expected_count' do
       let(:expected_count) { 2 }
       it { is_expected.to eq({ next: true, next_date_offset: message_date1 }) }
     end
 
-    context 'When messages count < expected_count' do
+    context 'when messages count < expected_count' do
       let(:expected_count) { 3 }
       it { is_expected.to eq({ next: false, next_date_offset: nil }) }
     end
