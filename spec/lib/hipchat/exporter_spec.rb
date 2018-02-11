@@ -5,6 +5,30 @@ describe HipChat::Exporter do
     it { expect(HipChat::Exporter.root_path).to eq File.expand_path('../../..', __dir__) }
   end
 
+  describe '#create_room_history_file_list' do
+    let(:room_id_example) { 1944196 }
+    let(:from) { Time.zone.local(2017, 11, 1) }
+    let(:to) { Time.zone.local(2017, 11, 7, 23, 59, 59) }
+
+    let(:room_history_dir) {
+      File.join(HipChat::Exporter.root_path, 'spec/tmp/rooms', room_id_example.to_s)
+    }
+
+    before do
+      FileUtils.rm_r(room_history_dir) if File.exist?(room_history_dir)
+    end
+
+    after do
+      FileUtils.rm_r(room_history_dir) if File.exist?(room_history_dir)
+    end
+
+    it 'create room history JSON file' do
+      expect {
+        exporter.create_room_history_file_list(room_id_example, from: from, to: to)
+      }.to change { Dir.glob("#{room_history_dir}/*").size }.by(2)
+    end
+  end
+
   describe '#create_room_history_file' do
     let(:room_id_example) { 1944196 }
     let(:from) { Time.zone.local(2018, 1, 1) }
