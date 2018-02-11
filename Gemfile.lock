@@ -2,6 +2,7 @@ GEM
   remote: https://rubygems.org/
   specs:
     diff-lcs (1.3)
+    dotenv (2.2.1)
     rspec (3.7.0)
       rspec-core (~> 3.7.0)
       rspec-expectations (~> 3.7.0)
@@ -22,8 +23,9 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  dotenv
   rspec
   rspec_junit_formatter
 
 BUNDLED WITH
-   1.16.0
+   1.16.1
