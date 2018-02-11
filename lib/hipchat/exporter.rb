@@ -12,16 +12,23 @@ module HipChat
       @client = ::HipChat::Client.new(api_token)
     end
 
-    def create_room_history_file(room_id_or_name)
-      FileUtils.mkdir_p(File.dirname(room_history_file_path(room_id_or_name)))
+    def create_room_history_file(room_id_or_name, from: nil, to: nil)
+      timestamp = to.respond_to?(:to_i) ? to.to_i : Time.current.to_i
 
-      response_body = fetch_room_history(room_id_or_name)
+      room_history_file_path = room_history_file_path(
+        room_id_or_name: room_id_or_name,
+        timestamp: timestamp,
+      )
 
-      File.open(room_history_file_path(room_id_or_name), 'w') do |file|
+      FileUtils.mkdir_p(File.dirname(room_history_file_path))
+
+      response_body = fetch_room_history(room_id_or_name, from: from, to: to)
+
+      File.open(room_history_file_path, 'w') do |file|
         file.write(response_body)
       end
 
-      room_history_file_path(room_id_or_name)
+      room_history_file_path
     end
 
     def fetch_room_history(room_id_or_name, from: nil, to: 'recent')
@@ -42,11 +49,11 @@ module HipChat
       )
     end
 
-    def room_history_file_path(room_id_or_name)
+    def room_history_file_path(room_id_or_name:, timestamp:)
       if ENV['ENV'] == 'test'
-        File.join(HipChat::Exporter.root_path, "spec/tmp/rooms/#{room_id_or_name}/history.json")
+        File.join(HipChat::Exporter.root_path, "spec/tmp/rooms/#{room_id_or_name}/history_#{timestamp}.json")
       else
-        File.join(HipChat::Exporter.root_path, "tmp/rooms/#{room_id_or_name}/history.json")
+        File.join(HipChat::Exporter.root_path, "tmp/rooms/#{room_id_or_name}/history_#{timestamp}.json")
       end
     end
   end

@@ -7,6 +7,9 @@ describe HipChat::Exporter do
 
   describe '#create_room_history_file' do
     let(:room_id_example) { 1944196 }
+    let(:from) { Time.zone.local(2018, 1, 1) }
+    let(:to) { Time.zone.local(2018, 1, 2) }
+
     let(:room_history_dir) {
       File.join(HipChat::Exporter.root_path, 'spec/tmp/rooms', room_id_example.to_s)
     }
@@ -19,9 +22,9 @@ describe HipChat::Exporter do
       FileUtils.rm_r(room_history_dir) if File.exist?(room_history_dir)
     end
 
-    it 'Create room history CSV file' do
+    it 'Create room history JSON file' do
       expect {
-        exporter.create_room_history_file(room_id_example)
+        exporter.create_room_history_file(room_id_example, from: from, to: to)
       }.to change { Dir.glob("#{room_history_dir}/*").size }.by(1)
     end
   end
