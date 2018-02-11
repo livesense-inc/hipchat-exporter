@@ -10,8 +10,24 @@ module Hipchat
       @client = ::HipChat::Client.new(api_token)
     end
 
+    def create_room_history_file(room_id_or_name)
+      FileUtils.mkdir_p(File.dirname(room_history_file_path(room_id_or_name)))
+
+      response_body = fetch_room_history(room_id_or_name)
+
+      File.open(room_history_file_path(room_id_or_name), 'w') do |file|
+        file.write(response_body)
+      end
+
+      room_history_file_path(room_id_or_name)
+    end
+
     def fetch_room_history(room_id_or_name)
       @client[room_id_or_name].history
+    end
+
+    def room_history_file_path(room_id_or_name)
+      File.join(Hipchat::Exporter.root_path, "tmp/rooms/#{room_id_or_name}/history.json")
     end
   end
 end
