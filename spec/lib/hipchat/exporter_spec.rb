@@ -1,14 +1,14 @@
-describe Hipchat::Exporter do
-  let(:exporter) { Hipchat::Exporter.new(ENV['HIPCHAT_TOKEN']) }
+describe HipChat::Exporter do
+  let(:exporter) { HipChat::Exporter.new(ENV['HIPCHAT_TOKEN']) }
 
   describe '.root_path' do
-    it { expect(Hipchat::Exporter.root_path).to eq File.expand_path('../../..', __dir__) }
+    it { expect(HipChat::Exporter.root_path).to eq File.expand_path('../../..', __dir__) }
   end
 
   describe '#create_room_history_file' do
     let(:room_id_example) { 1944196 }
     let(:room_history_dir) {
-      File.join(Hipchat::Exporter.root_path, 'spec/tmp/rooms', room_id_example.to_s)
+      File.join(HipChat::Exporter.root_path, 'spec/tmp/rooms', room_id_example.to_s)
     }
 
     before do
