@@ -1,6 +1,8 @@
 HipChat Exporter
 ================
 
+[![CircleCI](https://circleci.com/gh/livesense-inc/hipchat-exporter.svg?style=svg)](https://circleci.com/gh/livesense-inc/hipchat-exporter)
+
 Export the history (messages) of rooms from HipChat.
 
 ## Requirements
