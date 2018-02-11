@@ -8,8 +8,16 @@ describe Hipchat::Exporter do
   describe '#create_room_history_file' do
     let(:room_id_example) { 1944196 }
     let(:room_history_dir) {
-      File.join(Hipchat::Exporter.root_path, 'tmp/rooms', room_id_example.to_s)
+      File.join(Hipchat::Exporter.root_path, 'spec/tmp/rooms', room_id_example.to_s)
     }
+
+    before do
+      FileUtils.rm_r(room_history_dir) if File.exist?(room_history_dir)
+    end
+
+    after do
+      FileUtils.rm_r(room_history_dir) if File.exist?(room_history_dir)
+    end
 
     it 'Create room history CSV file' do
       expect {

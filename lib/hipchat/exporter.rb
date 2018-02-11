@@ -27,7 +27,11 @@ module Hipchat
     end
 
     def room_history_file_path(room_id_or_name)
-      File.join(Hipchat::Exporter.root_path, "tmp/rooms/#{room_id_or_name}/history.json")
+      if ENV['ENV'] == 'test'
+        File.join(Hipchat::Exporter.root_path, "spec/tmp/rooms/#{room_id_or_name}/history.json")
+      else
+        File.join(Hipchat::Exporter.root_path, "tmp/rooms/#{room_id_or_name}/history.json")
+      end
     end
   end
 end
