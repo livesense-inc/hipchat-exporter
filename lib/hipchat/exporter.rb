@@ -65,7 +65,8 @@ module HipChat
 
     def timestamp_from(time)
       begin
-        Time.zone.parse(time.to_s).to_i
+        # NG: Time.zone.parse(nil.to_s).to_i => 0
+        Time.parse(time.to_s).to_i
       rescue
         Time.current.to_i
       end
