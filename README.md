@@ -17,3 +17,9 @@ cd hipchat-exporter
 ```
 bundle install --path vendor/bundle
 ```
+
+## Testing
+
+```
+bundle exec rspec
+```
