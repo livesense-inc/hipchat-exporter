@@ -28,12 +28,15 @@ describe HipChat::Exporter do
 
   describe '#fetch_room_history' do
     let(:room_id_example) { 1944196 }
+    let(:from) { Time.zone.local(2018, 1, 1) }
+    let(:to) { Time.zone.local(2018, 1, 2) }
 
     it 'Get JSON response body' do
-      response_body = exporter.fetch_room_history(room_id_example)
+      response_body = exporter.fetch_room_history(room_id_example, from: from, to: to)
       json = JSON.parse(response_body)
 
       expect(json['items']).to be_present
+      expect(json['items'].count < HipChat::Exporter::MAX_RESULTS).to be_truthy
     end
   end
 end
