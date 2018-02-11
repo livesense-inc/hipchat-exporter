@@ -11,7 +11,7 @@ module Hipchat
     end
 
     def fetch_room_history(room_id_or_name)
-      @client[room_id_or_name].history(date: '2018-01-01')
+      @client[room_id_or_name].history
     end
   end
 end
