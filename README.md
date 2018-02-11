@@ -9,6 +9,14 @@ Export the history (messages) of rooms from HipChat.
 
 * Ruby 2.5.0
 
+## Usage
+
+Export the history of rooms to JSON files.
+
+```
+bundle exec thor history:export
+```
+
 ## Setup
 
 ```
