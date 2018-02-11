@@ -12,7 +12,7 @@ describe Hipchat::Exporter do
       response_body = exporter.fetch_room_history(room_id_example)
       json = JSON.parse(response_body)
 
-      expect(json['items']).not_to be_empty
+      expect(json['items']).to be_present
     end
   end
 end
