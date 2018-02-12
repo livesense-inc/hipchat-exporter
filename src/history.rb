@@ -13,8 +13,6 @@ class History
   def export(from: nil, to: nil)
     result_hash = { next: true, next_date_offset: to }
 
-    puts "Exporting history of #{room.name} (#{room.id})...".colorize(:cyan)
-
     loop do
       result_hash = export_file(from: from, to: result_hash[:next_date_offset])
       break unless result_hash[:next]

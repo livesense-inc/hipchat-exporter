@@ -36,6 +36,8 @@ module Task
       end
 
       Room.parse_csv.each do |room|
+        say "Exporting history of #{room.name} (#{room.id})", :cyan
+
         history = ::History.new(room)
         history.export(from: from, to: to)
       end
