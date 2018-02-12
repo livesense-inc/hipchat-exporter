@@ -6,6 +6,13 @@ require 'pry'
 ENV['TIME_ZONE'] ||= 'Etc/UTC'
 Time.zone = ENV['TIME_ZONE']
 
-Dir[File.join(__dir__, '../lib/**/*.rb')].each do |file|
+module HipChatExporter
+  ROOT_PATH = File.expand_path('../', __dir__)
+end
+
+Dir[
+  File.join(__dir__, '../lib/**/*.rb'),
+  File.join(__dir__, '../src/**/*.rb'),
+].each do |file|
   require file
 end

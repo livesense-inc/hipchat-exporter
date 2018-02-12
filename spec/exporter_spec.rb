@@ -1,5 +1,5 @@
-describe HipChatExporter::Exporter do
-  let(:exporter) { HipChatExporter::Exporter.new(ENV['HIPCHAT_TOKEN']) }
+describe Exporter do
+  let(:exporter) { Exporter.new(ENV['HIPCHAT_TOKEN']) }
 
   describe '#create_room_history_file_list' do
     let(:room_id_example) { 1944196 }
@@ -59,7 +59,7 @@ describe HipChatExporter::Exporter do
       json = JSON.parse(response_body)
 
       expect(json['items']).to be_present
-      expect(json['items'].count < HipChatExporter::Exporter::MAX_RESULTS).to be_truthy
+      expect(json['items'].count < Exporter::MAX_RESULTS).to be_truthy
     end
   end
 

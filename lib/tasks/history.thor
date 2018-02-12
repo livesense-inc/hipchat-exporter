@@ -34,9 +34,9 @@ class History < Thor
       end
     end
 
-    exporter = ::HipChatExporter::Exporter.new(ENV['HIPCHAT_TOKEN'])
+    exporter = Exporter.new(ENV['HIPCHAT_TOKEN'])
 
-    ::HipChatExporter::Room.parse_csv.each do |room|
+    Room.parse_csv.each do |room|
       exporter.create_room_history_file_list(room.id, from: from, to: to)
     end
   end
