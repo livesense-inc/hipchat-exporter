@@ -57,7 +57,7 @@ module HipChat
 
       @client[room_id_or_name].history(
         :'max-results' => HipChat::Exporter::MAX_RESULTS,
-        timezone: nil, # To avoid 401 Error. I dont know why
+        timezone: nil, # 401 Error if both timezone and end-date are set. (bug?)
         date: to,
         :'end-date' => from,
       )
