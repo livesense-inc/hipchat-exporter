@@ -52,8 +52,8 @@ module HipChat
       # Reverse the output such that the oldest message is first. For consistent paging, set to 'false'.
       # Defaults to true.
 
-      from = from.utc if from.respond_to?(:utc)
-      to = to.utc if to.respond_to?(:utc)
+      from = from.utc.iso8601(6) if from.respond_to?(:utc)
+      to = to.utc.iso8601(6) if to.respond_to?(:utc)
 
       @client[room_id_or_name].history(
         :'max-results' => HipChat::Exporter::MAX_RESULTS,
