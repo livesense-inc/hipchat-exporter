@@ -3,29 +3,29 @@ require 'hipchat'
 class History
   MAX_RESULTS = 1000
 
-  def initialize(api_token)
-    @client = HipChat::Client.new(api_token)
+  attr_reader :room, :client
+
+  def initialize(room)
+    @room = room
+    @client = HipChat::Client.new(ENV['HIPCHAT_TOKEN'])
   end
 
-  def export(room, from: nil, to: nil)
+  def export(from: nil, to: nil)
     result_hash = { next: true, next_date_offset: to }
 
     loop do
-      result_hash = create_room_history_file(
-        room.id,
-        from: from,
-        to: result_hash[:next_date_offset],
-      )
-
+      result_hash = export_file(from: from, to: result_hash[:next_date_offset])
       break unless result_hash[:next]
     end
   end
 
-  def create_room_history_file(room_id, from: nil, to: nil)
-    file_path = file_path(room_id: room_id, timestamp: timestamp_from(to))
+  private
+
+  def export_file(from: nil, to: nil)
+    file_path = file_path(timestamp: timestamp_from(to))
     FileUtils.mkdir_p(File.dirname(file_path))
 
-    response_body = fetch_room_history(room_id, from: from, to: to)
+    response_body = fetch(from: from, to: to)
 
     File.open(file_path, 'w') do |file|
       file.write(response_body)
@@ -34,22 +34,23 @@ class History
     result_hash_from(response_body)
   end
 
-  def fetch_room_history(room_id_or_name, from: nil, to: 'recent')
+  def fetch(from: nil, to: 'recent')
     # https://www.hipchat.com/docs/apiv2/method/view_room_history
     #
     # BOOLEAN reverse
     # Reverse the output such that the oldest message is first. For consistent paging, set to 'false'.
     # Defaults to true.
 
-    from = from.utc.iso8601(6) if from.respond_to?(:utc)
-    to = to.utc.iso8601(6) if to.respond_to?(:utc)
-
-    @client[room_id_or_name].history(
+    self.client[self.room.id].history(
       :'max-results' => History::MAX_RESULTS,
       timezone: nil, # 401 Error if both timezone and end-date are set. (bug?)
-      date: to,
-      :'end-date' => from,
+      date: utc_iso8601(to),
+      :'end-date' => utc_iso8601(from),
     )
+  end
+
+  def utc_iso8601(time)
+    time.respond_to?(:utc) ? time.utc.iso8601(6) : time
   end
 
   def timestamp_from(time)
@@ -71,13 +72,11 @@ class History
     end
   end
 
-  private
-
-  def file_path(room_id:, timestamp:)
+  def file_path(timestamp:)
     if ENV['ENV'] == 'test'
-      File.join(HipChatExporter::ROOT_PATH, "spec/tmp/rooms/#{room_id}/history_#{timestamp}.json")
+      File.join(HipChatExporter::ROOT_PATH, "spec/tmp/rooms/#{self.room.id}/history_#{timestamp}.json")
     else
-      File.join(HipChatExporter::ROOT_PATH, "tmp/rooms/#{room_id}/history_#{timestamp}.json")
+      File.join(HipChatExporter::ROOT_PATH, "tmp/rooms/#{self.room_id}/history_#{timestamp}.json")
     end
   end
 end

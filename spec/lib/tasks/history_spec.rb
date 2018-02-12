@@ -12,7 +12,7 @@ describe Task::History do
       FileUtils.rm_r(rooms_dir) if File.exist?(rooms_dir)
     end
 
-    it 'Create room history JSON files' do
+    it 'creates room history JSON files' do
       expect {
         Task::History.new.invoke(:export, [], force: true, from: '20180101', to: '20180107')
       }.to change { Dir[File.join(rooms_dir, '/*/history_*.json')].size }.by(2)

@@ -35,10 +35,9 @@ module Task
         end
       end
 
-      history = ::History.new(ENV['HIPCHAT_TOKEN'])
-
       Room.parse_csv.each do |room|
-        history.export(room, from: from, to: to)
+        history = ::History.new(room)
+        history.export(from: from, to: to)
       end
     end
 
