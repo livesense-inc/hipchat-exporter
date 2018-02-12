@@ -17,7 +17,7 @@ describe History do
 
     it 'Create room history CSV file' do
       expect {
-        History.new.invoke(:export, [], from: '20171101', to: '20171107')
+        History.new.invoke(:export, [], force: true, from: '20171101', to: '20171107')
       }.to change { Dir.glob("#{room_history_dir}/*").size }.by(2)
     end
   end
