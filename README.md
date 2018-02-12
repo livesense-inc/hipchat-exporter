@@ -42,10 +42,16 @@ bundle install --path vendor/bundle
 ```
 
 ```
-cp .env.sample .env
+cp .env.example .env
 ```
 
 Fill `HIPCHAT_TOKEN` in `.env`
+
+```
+cp rooms.csv.example rooms.csv
+```
+
+Fill room_id and room_name in `rooms.csv` (room_name is optional)
 
 ## Testing
 
