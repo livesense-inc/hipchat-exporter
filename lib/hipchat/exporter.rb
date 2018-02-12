@@ -4,10 +4,6 @@ module HipChat
   class Exporter
     MAX_RESULTS = 1000
 
-    def self.root_path
-      File.expand_path('../..', __dir__)
-    end
-
     def initialize(api_token)
       @client = ::HipChat::Client.new(api_token)
     end
@@ -74,9 +70,9 @@ module HipChat
 
     def room_history_file_path(room_id_or_name:, timestamp:)
       if ENV['ENV'] == 'test'
-        File.join(HipChat::Exporter.root_path, "spec/tmp/rooms/#{room_id_or_name}/history_#{timestamp}.json")
+        File.join(HipChatExporter::ROOT_PATH, "spec/tmp/rooms/#{room_id_or_name}/history_#{timestamp}.json")
       else
-        File.join(HipChat::Exporter.root_path, "tmp/rooms/#{room_id_or_name}/history_#{timestamp}.json")
+        File.join(HipChatExporter::ROOT_PATH, "tmp/rooms/#{room_id_or_name}/history_#{timestamp}.json")
       end
     end
 

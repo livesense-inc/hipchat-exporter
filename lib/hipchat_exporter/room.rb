@@ -17,9 +17,9 @@ module HipChatExporter
 
       def rooms_csv_path
         if ENV['ENV'] == 'test'
-          File.join(HipChat::Exporter.root_path, 'spec/rooms.csv')
+          File.join(HipChatExporter::ROOT_PATH, 'spec/rooms.csv')
         else
-          File.join(HipChat::Exporter.root_path, 'rooms.csv')
+          File.join(HipChatExporter::ROOT_PATH, 'rooms.csv')
         end
       end
     end

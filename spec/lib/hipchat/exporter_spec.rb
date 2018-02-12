@@ -2,7 +2,7 @@ describe HipChat::Exporter do
   let(:exporter) { HipChat::Exporter.new(ENV['HIPCHAT_TOKEN']) }
 
   describe '.root_path' do
-    it { expect(HipChat::Exporter.root_path).to eq File.expand_path('../../..', __dir__) }
+    it { expect(HipChatExporter::ROOT_PATH).to eq File.expand_path('../../..', __dir__) }
   end
 
   describe '#create_room_history_file_list' do
@@ -11,7 +11,7 @@ describe HipChat::Exporter do
     let(:to) { Time.zone.local(2017, 11, 7, 23, 59, 59) }
 
     let(:room_history_dir) {
-      File.join(HipChat::Exporter.root_path, 'spec/tmp/rooms', room_id_example.to_s)
+      File.join(HipChatExporter::ROOT_PATH, 'spec/tmp/rooms', room_id_example.to_s)
     }
 
     before do
@@ -35,7 +35,7 @@ describe HipChat::Exporter do
     let(:to) { Time.zone.local(2018, 1, 2) }
 
     let(:room_history_dir) {
-      File.join(HipChat::Exporter.root_path, 'spec/tmp/rooms', room_id_example.to_s)
+      File.join(HipChatExporter::ROOT_PATH, 'spec/tmp/rooms', room_id_example.to_s)
     }
 
     before do

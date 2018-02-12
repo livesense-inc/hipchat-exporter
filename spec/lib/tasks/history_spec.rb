@@ -4,7 +4,7 @@ describe History do
   describe '#export' do
     let(:room_id_example) { 1944196 }
     let(:room_history_dir) {
-      File.join(HipChat::Exporter.root_path, 'spec/tmp/rooms', room_id_example.to_s)
+      File.join(HipChatExporter::ROOT_PATH, 'spec/tmp/rooms', room_id_example.to_s)
     }
 
     before do
