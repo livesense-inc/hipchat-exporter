@@ -13,6 +13,8 @@ class History
   def export(from: nil, to: nil)
     result_hash = { next: true, next_date_offset: to }
 
+    puts "Exporting history of #{room.name} (#{room.id})...".colorize(:cyan)
+
     loop do
       result_hash = export_file(from: from, to: result_hash[:next_date_offset])
       break unless result_hash[:next]
@@ -46,7 +48,7 @@ class History
 
     puts "Fetching history of #{room.name} (#{room.id}), date: \"#{to}\", end-date: \"#{from}\", max-results: #{History::MAX_RESULTS}"
 
-    self.client[self.room.id].history(
+    client[room.id].history(
       :'max-results' => History::MAX_RESULTS,
       timezone: nil, # 401 Error if both timezone and end-date are set. (bug?)
       date: to,
@@ -79,9 +81,9 @@ class History
 
   def file_path(timestamp:)
     if ENV['ENV'] == 'test'
-      File.join(HipChatExporter::ROOT_PATH, "spec/tmp/rooms/#{self.room.id}/history_#{timestamp}.json")
+      File.join(HipChatExporter::ROOT_PATH, "spec/tmp/rooms/#{room.id}/history_#{timestamp}.json")
     else
-      File.join(HipChatExporter::ROOT_PATH, "tmp/rooms/#{self.room_id}/history_#{timestamp}.json")
+      File.join(HipChatExporter::ROOT_PATH, "tmp/rooms/#{room.id}/history_#{timestamp}.json")
     end
   end
 end
