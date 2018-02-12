@@ -6,9 +6,9 @@
 
 /.bundle/
 /spec/tmp/
-/spec/examples.txt
 /tmp/
 /vendor/
 
-.env
-rooms.csv
+/.env
+/rooms.csv
+/spec/examples.txt
