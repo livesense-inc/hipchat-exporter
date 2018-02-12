@@ -1,10 +1,6 @@
 describe HipChatExporter::Exporter do
   let(:exporter) { HipChatExporter::Exporter.new(ENV['HIPCHAT_TOKEN']) }
 
-  describe '.root_path' do
-    it { expect(HipChatExporter::ROOT_PATH).to eq File.expand_path('../../..', __dir__) }
-  end
-
   describe '#create_room_history_file_list' do
     let(:room_id_example) { 1944196 }
     let(:from) { Time.zone.local(2017, 11, 1) }
