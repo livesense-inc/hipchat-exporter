@@ -7,12 +7,12 @@ class History
     @client = HipChat::Client.new(api_token)
   end
 
-  def create_room_history_file_list(room_id_or_name, from: nil, to: nil)
+  def export(room, from: nil, to: nil)
     result_hash = { next: true, next_date_offset: to }
 
     loop do
       result_hash = create_room_history_file(
-        room_id_or_name,
+        room.id,
         from: from,
         to: result_hash[:next_date_offset],
       )

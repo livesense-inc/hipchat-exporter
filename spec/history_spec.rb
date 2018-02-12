@@ -1,27 +1,24 @@
 describe History do
-  let(:exporter) { History.new(ENV['HIPCHAT_TOKEN']) }
+  let(:history) { History.new(ENV['HIPCHAT_TOKEN']) }
 
-  describe '#create_room_history_file_list' do
+  describe '#export' do
     let(:room_id_example) { 1944196 }
+    let(:room) { Room.new(id: room_id_example) }
     let(:from) { Time.zone.local(2017, 11, 1) }
-    let(:to) { Time.zone.local(2017, 11, 7, 23, 59, 59) }
+    let(:to) { Time.zone.local(2017, 11, 7).end_of_day }
 
-    let(:room_history_dir) {
+    let(:history_dir) {
       File.join(HipChatExporter::ROOT_PATH, 'spec/tmp/rooms', room_id_example.to_s)
     }
 
-    before do
-      FileUtils.rm_r(room_history_dir) if File.exist?(room_history_dir)
-    end
-
     after do
-      FileUtils.rm_r(room_history_dir) if File.exist?(room_history_dir)
+      FileUtils.rm_r(history_dir)
     end
 
-    it 'create room history JSON file' do
+    it 'exports room history to JSON file' do
       expect {
-        exporter.create_room_history_file_list(room_id_example, from: from, to: to)
-      }.to change { Dir.glob("#{room_history_dir}/*").size }.by(2)
+        history.export(room, from: from, to: to)
+      }.to change { Dir[File.join(history_dir, 'history_*.json')].size }
     end
   end
 
@@ -44,7 +41,7 @@ describe History do
 
     it 'create room history JSON file' do
       expect {
-        exporter.create_room_history_file(room_id_example, from: from, to: to)
+        history.create_room_history_file(room_id_example, from: from, to: to)
       }.to change { Dir.glob("#{room_history_dir}/*").size }.by(1)
     end
   end
@@ -55,7 +52,7 @@ describe History do
     let(:to) { Time.zone.local(2018, 1, 2) }
 
     it 'get JSON response body' do
-      response_body = exporter.fetch_room_history(room_id_example, from: from, to: to)
+      response_body = history.fetch_room_history(room_id_example, from: from, to: to)
       json = JSON.parse(response_body)
 
       expect(json['items']).to be_present
@@ -64,7 +61,7 @@ describe History do
   end
 
   describe '#timezone_from' do
-    subject { exporter.timestamp_from(time).to_s }
+    subject { history.timestamp_from(time).to_s }
 
     context 'when time class is Time (or TimeWithZone)' do
       let(:time) { Time.zone.local(2018, 2, 1) }
@@ -98,7 +95,7 @@ describe History do
       }.to_json
     }
 
-    subject { exporter.result_hash_from(response_body, expected_count: expected_count) }
+    subject { history.result_hash_from(response_body, expected_count: expected_count) }
 
     context 'when messages count == expected_count' do
       let(:expected_count) { 2 }
