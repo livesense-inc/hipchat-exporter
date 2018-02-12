@@ -1,6 +1,6 @@
 require 'hipchat'
 
-module HipChat
+module HipChatExporter
   class Exporter
     MAX_RESULTS = 1000
 
@@ -52,7 +52,7 @@ module HipChat
       to = to.utc.iso8601(6) if to.respond_to?(:utc)
 
       @client[room_id_or_name].history(
-        :'max-results' => HipChat::Exporter::MAX_RESULTS,
+        :'max-results' => HipChatExporter::Exporter::MAX_RESULTS,
         timezone: nil, # 401 Error if both timezone and end-date are set. (bug?)
         date: to,
         :'end-date' => from,
@@ -76,7 +76,7 @@ module HipChat
       end
     end
 
-    def result_hash_from(response_body, expected_count: HipChat::Exporter::MAX_RESULTS)
+    def result_hash_from(response_body, expected_count: HipChatExporter::Exporter::MAX_RESULTS)
       json = JSON.parse(response_body)
 
       if json['items'].count == expected_count

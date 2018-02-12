@@ -1,5 +1,5 @@
-describe HipChat::Exporter do
-  let(:exporter) { HipChat::Exporter.new(ENV['HIPCHAT_TOKEN']) }
+describe HipChatExporter::Exporter do
+  let(:exporter) { HipChatExporter::Exporter.new(ENV['HIPCHAT_TOKEN']) }
 
   describe '.root_path' do
     it { expect(HipChatExporter::ROOT_PATH).to eq File.expand_path('../../..', __dir__) }
@@ -63,7 +63,7 @@ describe HipChat::Exporter do
       json = JSON.parse(response_body)
 
       expect(json['items']).to be_present
-      expect(json['items'].count < HipChat::Exporter::MAX_RESULTS).to be_truthy
+      expect(json['items'].count < HipChatExporter::Exporter::MAX_RESULTS).to be_truthy
     end
   end
 
