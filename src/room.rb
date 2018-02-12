@@ -9,8 +9,8 @@ class Room
     end
 
     def generate(csv_row)
-      data = { id: csv_row[0] }
-      data[:name] = csv_row[1] if csv_row[1].present?
+      data = { id: csv_row[0].strip }
+      data[:name] = csv_row[1].strip if csv_row[1].present?
       self.new(data)
     end
 

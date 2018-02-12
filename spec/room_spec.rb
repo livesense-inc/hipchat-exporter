@@ -10,16 +10,16 @@ describe Room do
     let(:room) { Room.generate(csv_row) }
 
     context 'when name exists' do
-      let(:csv_row) { [123, 'My Room'] }
+      let(:csv_row) { ['123', 'My Room'] }
 
-      it { expect(room.id).to eq 123 }
+      it { expect(room.id).to eq '123' }
       it { expect(room.name).to eq 'My Room' }
     end
 
     context 'when name not exist' do
-      let(:csv_row) { [123] }
+      let(:csv_row) { ['123'] }
 
-      it { expect(room.id).to eq 123 }
+      it { expect(room.id).to eq '123' }
       it { expect(room.name).to eq 'room_123' }
     end
   end

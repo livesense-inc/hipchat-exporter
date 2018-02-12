@@ -41,11 +41,16 @@ class History
     # Reverse the output such that the oldest message is first. For consistent paging, set to 'false'.
     # Defaults to true.
 
+    from = utc_iso8601(from)
+    to = utc_iso8601(to)
+
+    puts "Fetching history of #{room.name} (#{room.id}), date: \"#{to}\", end-date: \"#{from}\", max-results: #{History::MAX_RESULTS}"
+
     self.client[self.room.id].history(
       :'max-results' => History::MAX_RESULTS,
       timezone: nil, # 401 Error if both timezone and end-date are set. (bug?)
-      date: utc_iso8601(to),
-      :'end-date' => utc_iso8601(from),
+      date: to,
+      :'end-date' => from,
     )
   end
 
