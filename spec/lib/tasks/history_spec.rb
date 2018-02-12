@@ -2,23 +2,20 @@ load 'lib/tasks/history.thor'
 
 describe History do
   describe '#export' do
-    let(:room_id_example) { 1944196 }
-    let(:room_history_dir) {
-      File.join(HipChatExporter::ROOT_PATH, 'spec/tmp/rooms', room_id_example.to_s)
-    }
+    let(:rooms_dir) { File.join(HipChatExporter::ROOT_PATH, 'spec/tmp/rooms') }
 
     before do
-      FileUtils.rm_r(room_history_dir) if File.exist?(room_history_dir)
+      FileUtils.rm_r(rooms_dir) if File.exist?(rooms_dir)
     end
 
     after do
-      FileUtils.rm_r(room_history_dir) if File.exist?(room_history_dir)
+      FileUtils.rm_r(rooms_dir) if File.exist?(rooms_dir)
     end
 
-    it 'Create room history CSV file' do
+    it 'Create room history JSON files' do
       expect {
-        History.new.invoke(:export, [], force: true, from: '20171101', to: '20171107')
-      }.to change { Dir.glob("#{room_history_dir}/*").size }.by(2)
+        History.new.invoke(:export, [], force: true, from: '20180101', to: '20180107')
+      }.to change { Dir[File.join(rooms_dir, '/*/history_*.json')].size }.by(2)
     end
   end
 end
