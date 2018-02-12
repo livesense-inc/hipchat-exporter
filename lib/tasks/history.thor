@@ -35,7 +35,7 @@ module Task
         end
       end
 
-      exporter = Exporter.new(ENV['HIPCHAT_TOKEN'])
+      exporter = ::History.new(ENV['HIPCHAT_TOKEN'])
 
       Room.parse_csv.each do |room|
         exporter.create_room_history_file_list(room.id, from: from, to: to)
