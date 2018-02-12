@@ -21,19 +21,13 @@ class History
     end
   end
 
-  def create_room_history_file(room_id_or_name, from: nil, to: nil)
-    timestamp = timestamp_from(to)
+  def create_room_history_file(room_id, from: nil, to: nil)
+    file_path = file_path(room_id: room_id, timestamp: timestamp_from(to))
+    FileUtils.mkdir_p(File.dirname(file_path))
 
-    room_history_file_path = room_history_file_path(
-      room_id_or_name: room_id_or_name,
-      timestamp: timestamp,
-    )
+    response_body = fetch_room_history(room_id, from: from, to: to)
 
-    FileUtils.mkdir_p(File.dirname(room_history_file_path))
-
-    response_body = fetch_room_history(room_id_or_name, from: from, to: to)
-
-    File.open(room_history_file_path, 'w') do |file|
+    File.open(file_path, 'w') do |file|
       file.write(response_body)
     end
 
@@ -67,14 +61,6 @@ class History
     end
   end
 
-  def room_history_file_path(room_id_or_name:, timestamp:)
-    if ENV['ENV'] == 'test'
-      File.join(HipChatExporter::ROOT_PATH, "spec/tmp/rooms/#{room_id_or_name}/history_#{timestamp}.json")
-    else
-      File.join(HipChatExporter::ROOT_PATH, "tmp/rooms/#{room_id_or_name}/history_#{timestamp}.json")
-    end
-  end
-
   def result_hash_from(response_body, expected_count: History::MAX_RESULTS)
     json = JSON.parse(response_body)
 
@@ -82,6 +68,16 @@ class History
       { next: true, next_date_offset: json['items'].first['date'] }
     else
       { next: false, next_date_offset: nil }
+    end
+  end
+
+  private
+
+  def file_path(room_id:, timestamp:)
+    if ENV['ENV'] == 'test'
+      File.join(HipChatExporter::ROOT_PATH, "spec/tmp/rooms/#{room_id}/history_#{timestamp}.json")
+    else
+      File.join(HipChatExporter::ROOT_PATH, "tmp/rooms/#{room_id}/history_#{timestamp}.json")
     end
   end
 end
