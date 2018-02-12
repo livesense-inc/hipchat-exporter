@@ -29,7 +29,7 @@ module Task
           return say_abort
         end
       else
-        to = nil
+        to = Time.current
         unless options[:force] || yes?("\"to\" option is NOT set, OK? (y/N)", :yellow)
           return say_abort
         end

@@ -46,7 +46,11 @@ class History
     from = utc_iso8601(from)
     to = utc_iso8601(to)
 
-    puts "Fetching history of #{room.name} (#{room.id}), date: \"#{to}\", end-date: \"#{from}\", max-results: #{History::MAX_RESULTS}"
+    message = "Fetching history of #{room.name} (#{room.id}), date: \"#{to}\""
+    message += ", end-date: \"#{from}\"" if from.present?
+    message += ", max-results: #{History::MAX_RESULTS}"
+
+    puts message
 
     client[room.id].history(
       :'max-results' => History::MAX_RESULTS,
