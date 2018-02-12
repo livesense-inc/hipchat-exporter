@@ -14,22 +14,20 @@ Export the history (messages) of rooms from HipChat.
 Export the history of rooms to JSON files.
 
 ```
-bundle exec thor help history:export
-```
-
-```
+# bundle exec thor help history:export
 Usage:
-  thor history:export
+  thor task:history:export
 
 Options:
-  [--from=FROM]
-  [--to=TO]
+  [--from=FROM]  # Date (or Time) like "20180101"
+  [--to=TO]      # Date (or Time), like "20180131", default is Time.current
+  [--force]      # Skip asking questions
 ```
 
 Example:
 
 ```
-bundle exec thor history:export --from=20171101 --to=20171107
+bundle exec thor task:history:export --from=20171101 --to=20171107
 ```
 
 ## Setup

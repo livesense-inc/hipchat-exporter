@@ -3,9 +3,9 @@ require 'thor'
 module Task
   class History < Thor
     desc 'export', 'Export the history of rooms to JSON files'
-    method_option :from, type: :string
-    method_option :to, type: :string
-    method_option :force, type: :boolean, default: false
+    method_option :from, type: :string, desc: 'Date (or Time) like "20180101"'
+    method_option :to, type: :string, desc: 'Date (or Time), like "20180131", default is Time.current'
+    method_option :force, type: :boolean, default: false, desc: 'Skip asking questions'
     def export
       unless options[:force] || yes?("Export the history of rooms to JSON files? (y/N)", :yellow)
         return say_abort
