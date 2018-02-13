@@ -6,6 +6,7 @@
 
 /.bundle/
 /spec/tmp/
+/log/
 /tmp/
 /vendor/
 

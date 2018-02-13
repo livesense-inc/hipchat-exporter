@@ -48,6 +48,7 @@ class History
     message += ", end-date: \"#{from}\"" if from.present?
     message += ", max-results: #{History::MAX_RESULTS}"
 
+    HipChatExporter.logger.info(message)
     puts message
 
     client[room.id].history(
