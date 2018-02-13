@@ -34,6 +34,40 @@ describe History do
     end
   end
 
+  describe '#fetch_with_rate_limit' do
+    let(:from) { Time.zone.local(2018, 1, 1) }
+    let(:to) { Time.zone.local(2018, 1, 2).end_of_day }
+
+    context 'with no exception' do
+      it 'gets JSON response body' do
+        response_body = history.send(:fetch_with_rate_limit, from: from, to: to)
+        json = JSON.parse(response_body)
+
+        expect(json['items']).to be_present
+        expect(json['items'].count < History::MAX_RESULTS).to be_truthy
+      end
+    end
+
+    context 'with HipChat::TooManyRequests from fetch method' do
+      let(:response) { double('Error response') }
+      let(:response_headers) { { 'x-ratelimit-reset' => 10.seconds.from_now.to_i.to_s } }
+      let(:exception) { HipChat::TooManyRequests.new('You have exceeded the rate limit.', response: response) }
+
+      before do
+        allow(response).to receive(:headers).and_return(response_headers)
+        allow(history).to receive(:fetch).and_raise(exception)
+      end
+
+      it 'handles HipChat::TooManyRequests and sleep' do
+        expect(history).to receive(:sleep).at_least(:once)
+
+        expect {
+          history.send(:fetch_with_rate_limit, from: from, to: to)
+        }.to raise_error(HipChat::TooManyRequests) # because of retrying fetch
+      end
+    end
+  end
+
   describe '#fetch' do
     let(:from) { Time.zone.local(2018, 1, 1) }
     let(:to) { Time.zone.local(2018, 1, 2).end_of_day }

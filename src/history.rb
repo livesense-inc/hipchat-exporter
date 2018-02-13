@@ -59,13 +59,38 @@ class History
     file_path = file_path(timestamp: timestamp_from(to))
     FileUtils.mkdir_p(File.dirname(file_path))
 
-    response_body = fetch(from: from, to: to)
+    response_body = fetch_with_rate_limit(from: from, to: to)
 
     File.open(file_path, 'w') do |file|
       file.write(response_body)
     end
 
     result_hash_from(response_body)
+  end
+
+  def fetch_with_rate_limit(from: nil, to: nil)
+    fetch(from: from, to: to)
+
+  rescue HipChat::TooManyRequests => e
+    x_ratelimit_reset = e.response.headers['x-ratelimit-reset'].to_i
+
+    messages = [
+      "Caught exception: #{e.class}, room_id: #{room.id}, room_name: #{room.name}, from: #{from}, to: #{to}",
+      e.message,
+      "X-Ratelimit-Reset: #{x_ratelimit_reset.to_s}",
+      "Sleep until #{Time.zone.at(x_ratelimit_reset).to_s} and retry fetching ..."
+    ]
+
+    messages.each do |message|
+      HipChatExporter.logger.warn(message)
+      puts message.colorize(:yellow)
+    end
+
+    until Time.current.to_i > x_ratelimit_reset
+      sleep 10
+    end
+
+    fetch(from: from, to: to) # retry
   end
 
   def fetch(from: nil, to: 'recent')
