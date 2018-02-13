@@ -7,6 +7,7 @@ GEM
       minitest (~> 5.1)
       tzinfo (~> 1.1)
     coderay (1.1.2)
+    colorize (0.8.1)
     concurrent-ruby (1.0.5)
     diff-lcs (1.3)
     dotenv (2.2.1)
@@ -49,6 +50,7 @@ PLATFORMS
 
 DEPENDENCIES
   activesupport
+  colorize
   dotenv
   hipchat
   pry

@@ -17,6 +17,25 @@ class History
       result_hash = export_partially(from: from, to: result_hash[:next_date_offset])
       break unless result_hash[:next]
     end
+
+  rescue => e
+    message = "Caught exception: #{e.class}, room_id: #{room.id}, room_name: #{room.name}, from: #{from}, to: #{to}"
+
+    HipChatExporter.logger.error(message)
+    puts message.colorize(:red)
+
+    HipChatExporter.logger.error(e.message)
+    puts e.message.colorize(:red)
+
+    e.backtrace.each do |row|
+      HipChatExporter.logger.error(row)
+    end
+
+    warn_message = "Sleep 10 seconds and continue ..."
+    HipChatExporter.logger.warn(warn_message)
+    puts warn_message.colorize(:yellow)
+
+    sleep 10
   end
 
   private

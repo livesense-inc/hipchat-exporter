@@ -1,5 +1,6 @@
 require 'active_support'
 require 'active_support/core_ext'
+require 'colorize'
 require 'dotenv/load'
 require 'pry'
 
