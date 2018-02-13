@@ -44,11 +44,30 @@ module Task
       end
     end
 
+    desc 'clear', 'Remove room history JSON files'
+    method_option :force, type: :boolean, default: false, desc: 'Skip asking questions'
+    def clear
+      unless options[:force] || yes?("Remove room history JSON files? (y/N)", :yellow)
+        return say_abort
+      end
+
+      FileUtils.rm_r(rooms_dir) if File.exist?(rooms_dir)
+      say 'Room history JSON files are removed'
+    end
+
     no_commands do
       private
 
       def say_abort
         say 'Task is aborted'
+      end
+
+      def rooms_dir
+        if ENV['ENV'] == 'test'
+          File.join(HipChatExporter::ROOT_PATH, 'spec/tmp/rooms')
+        else
+          File.join(HipChatExporter::ROOT_PATH, 'tmp/rooms')
+        end
       end
     end
   end
