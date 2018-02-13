@@ -5,4 +5,11 @@
 #   git config --global core.excludesfile '~/.gitignore_global'
 
 /.bundle/
+/spec/tmp/
+/log/
+/tmp/
 /vendor/
+
+/.env
+/rooms.csv
+/spec/examples.txt
