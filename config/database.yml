@@ -1,0 +1,15 @@
+default: &default
+  adapter: mysql2
+  encoding: utf8
+  charset: utf8
+  collation: utf8_general_ci
+  pool: 5
+  username: root
+  password:
+  host: 127.0.0.1
+  socket: /tmp/mysql.sock
+  database: hipchat_exporter
+
+test:
+  <<: *default
+  database: hipchat_exporter_test
