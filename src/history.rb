@@ -19,38 +19,14 @@ class History
     end
 
   rescue => e
-    # TODO: Improve handling exception
-    message = "Caught exception: #{e.class}, room_id: #{room.id}, room_name: #{room.name}, from: #{from}, to: #{to}"
-
-    HipChatExporter.logger.error(message)
-    puts message.colorize(:red)
-
-    HipChatExporter.logger.error(e.message)
-    puts e.message.colorize(:red)
+    HipChatExporter.logger.error("Caught exception: #{e.class}, room_id: #{room.id}, room_name: #{room.name}, from: #{from}, to: #{to}", with_put: true)
+    HipChatExporter.logger.error(e.message, with_put: true)
 
     e.backtrace.each do |row|
       HipChatExporter.logger.error(row)
     end
 
-    if e.class == HipChat::TooManyRequests
-      x_ratelimit_reset = e.response.headers['x-ratelimit-reset']
-
-      warn_message = "X-Ratelimit-Reset: #{x_ratelimit_reset}"
-      HipChatExporter.logger.warn(warn_message)
-      puts warn_message.colorize(:yellow)
-
-      warn_message = "Sleep until #{Time.zone.at(x_ratelimit_reset.to_i).to_s} and continue ..."
-      HipChatExporter.logger.warn(warn_message)
-      puts warn_message.colorize(:yellow)
-
-      until Time.current.to_i > x_ratelimit_reset.to_i
-        sleep 10
-      end
-    else
-      warn_message = "Do nothing for this exception and continue ..."
-      HipChatExporter.logger.warn(warn_message)
-      puts warn_message.colorize(:yellow)
-    end
+    HipChatExporter.logger.warn("Do nothing for this exception and continue ...", with_put: true)
   end
 
   private
@@ -74,17 +50,10 @@ class History
   rescue HipChat::TooManyRequests => e
     x_ratelimit_reset = e.response.headers['x-ratelimit-reset'].to_i
 
-    messages = [
-      "Caught exception: #{e.class}, room_id: #{room.id}, room_name: #{room.name}, from: #{from}, to: #{to}",
-      e.message,
-      "X-Ratelimit-Reset: #{x_ratelimit_reset.to_s}",
-      "Sleep until #{Time.zone.at(x_ratelimit_reset).to_s} and retry fetching ..."
-    ]
-
-    messages.each do |message|
-      HipChatExporter.logger.warn(message)
-      puts message.colorize(:yellow)
-    end
+    HipChatExporter.logger.error("Caught exception: #{e.class}, room_id: #{room.id}, room_name: #{room.name}, from: #{from}, to: #{to}", with_put: true)
+    HipChatExporter.logger.error(e.message, with_put: true)
+    HipChatExporter.logger.warn("X-Ratelimit-Reset: #{x_ratelimit_reset.to_s}", with_put: true)
+    HipChatExporter.logger.warn("Sleep until #{Time.zone.at(x_ratelimit_reset).to_s} and retry fetching ...", with_put: true)
 
     until Time.current.to_i > x_ratelimit_reset
       sleep 10

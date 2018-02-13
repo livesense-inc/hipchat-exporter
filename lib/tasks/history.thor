@@ -37,8 +37,7 @@ module Task
 
       Room.parse_csv.each do |room|
         message = "Exporting history of #{room.name} (#{room.id}) ..."
-        HipChatExporter.logger.info(message)
-        say message, :cyan
+        HipChatExporter.logger.info(message, with_put: true, color: :cyan)
 
         history = ::History.new(room)
         history.export(from: from, to: to)
