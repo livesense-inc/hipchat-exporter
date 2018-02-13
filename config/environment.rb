@@ -4,6 +4,7 @@ require 'active_support/core_ext'
 require 'colorize'
 require 'dotenv/load'
 require 'pry'
+require 'rake'
 
 ENV['TIME_ZONE'] ||= 'Etc/UTC'
 Time.zone = ENV['TIME_ZONE']
