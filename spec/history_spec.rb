@@ -29,7 +29,7 @@ describe History do
 
     it 'exports room history to JSON file' do
       expect {
-        history.send(:export_file, from: from, to: to)
+        history.send(:export_partially, from: from, to: to)
       }.to change { Dir[File.join(history_dir, 'history_*.json')].size }
     end
   end

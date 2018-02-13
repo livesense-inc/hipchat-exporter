@@ -14,14 +14,14 @@ class History
     result_hash = { next: true, next_date_offset: to }
 
     loop do
-      result_hash = export_file(from: from, to: result_hash[:next_date_offset])
+      result_hash = export_partially(from: from, to: result_hash[:next_date_offset])
       break unless result_hash[:next]
     end
   end
 
   private
 
-  def export_file(from: nil, to: nil)
+  def export_partially(from: nil, to: nil)
     file_path = file_path(timestamp: timestamp_from(to))
     FileUtils.mkdir_p(File.dirname(file_path))
 
