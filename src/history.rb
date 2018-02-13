@@ -37,8 +37,7 @@ class History
 
     # e.response.headers["x-ratelimit-reset"]
     # => "60"
-
-    sleep 60
+    sleep 64 # 60 + buffer
   end
 
   private
