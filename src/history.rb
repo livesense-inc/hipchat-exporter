@@ -19,6 +19,7 @@ class History
     end
 
   rescue => e
+    # TODO: Improve handling exception
     message = "Caught exception: #{e.class}, room_id: #{room.id}, room_name: #{room.name}, from: #{from}, to: #{to}"
 
     HipChatExporter.logger.error(message)
@@ -31,13 +32,25 @@ class History
       HipChatExporter.logger.error(row)
     end
 
-    warn_message = "Sleep 60 seconds and continue ..."
-    HipChatExporter.logger.warn(warn_message)
-    puts warn_message.colorize(:yellow)
+    if e.class == HipChat::TooManyRequests
+      x_ratelimit_reset = e.response.headers['x-ratelimit-reset']
 
-    # e.response.headers["x-ratelimit-reset"]
-    # => "60"
-    sleep 64 # 60 + buffer
+      warn_message = "X-Ratelimit-Reset: #{x_ratelimit_reset}"
+      HipChatExporter.logger.warn(warn_message)
+      puts warn_message.colorize(:yellow)
+
+      warn_message = "Sleep until #{Time.zone.at(x_ratelimit_reset.to_i).to_s} and continue ..."
+      HipChatExporter.logger.warn(warn_message)
+      puts warn_message.colorize(:yellow)
+
+      until Time.current.to_i > x_ratelimit_reset.to_i
+        sleep 10
+      end
+    else
+      warn_message = "Do nothing for this exception and continue ..."
+      HipChatExporter.logger.warn(warn_message)
+      puts warn_message.colorize(:yellow)
+    end
   end
 
   private
