@@ -31,11 +31,14 @@ class History
       HipChatExporter.logger.error(row)
     end
 
-    warn_message = "Sleep 10 seconds and continue ..."
+    warn_message = "Sleep 60 seconds and continue ..."
     HipChatExporter.logger.warn(warn_message)
     puts warn_message.colorize(:yellow)
 
-    sleep 10
+    # e.response.headers["x-ratelimit-reset"]
+    # => "60"
+
+    sleep 60
   end
 
   private
