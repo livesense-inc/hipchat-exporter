@@ -6,7 +6,10 @@ describe History do
 
     it 'parses json file and generate history instance' do
       history = History.parse_json(history_json_path)
+
       expect(history.class).to eq History
+      expect(history.room_id).to eq '1234567'
+      expect(history.items).to be_present
     end
   end
 end
