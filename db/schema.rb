@@ -18,7 +18,7 @@ ActiveRecord::Schema.define(version: 1518532359) do
     t.string "sender_mention_name", null: false
     t.string "sender_name", null: false
     t.text "body", null: false
-    t.datetime "sent_at", null: false
+    t.datetime "sent_at", precision: 6, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["sent_at"], name: "index_messages_on_sent_at"

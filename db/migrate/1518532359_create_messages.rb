@@ -6,7 +6,7 @@ class CreateMessages < ActiveRecord::Migration[5.1]
       t.string :sender_mention_name, null: false
       t.string :sender_name, null: false
       t.text :body, null: false
-      t.datetime :sent_at, null: false
+      t.datetime :sent_at, limit: 6, null: false
 
       t.timestamps null: false
     end

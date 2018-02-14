@@ -21,7 +21,7 @@ namespace :db do
   task :migrate do
     ActiveRecord::Base.establish_connection(db_config)
     ActiveRecord::Migrator.migrate('db/migrate/')
-    Rake::Task['db:schema'].invoke
+    Rake::Task['db:schema'].invoke if ENV['ENV'] == 'default'
     puts "Database #{db_config['database']} migrated"
   end
 
@@ -29,7 +29,7 @@ namespace :db do
   task :rollback do
     ActiveRecord::Base.establish_connection(db_config)
     ActiveRecord::Migrator.rollback('db/migrate/')
-    Rake::Task['db:schema'].invoke
+    Rake::Task['db:schema'].invoke if ENV['ENV'] == 'default'
     puts "Database #{db_config['database']} rollbacked"
   end
 
