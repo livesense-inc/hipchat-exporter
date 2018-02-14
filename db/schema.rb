@@ -13,6 +13,7 @@
 ActiveRecord::Schema.define(version: 1518532359) do
 
   create_table "messages", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+    t.integer "room_id", null: false
     t.string "uuid", null: false
     t.string "sender_mention_name", null: false
     t.string "sender_name", null: false
