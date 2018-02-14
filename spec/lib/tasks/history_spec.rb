@@ -27,4 +27,12 @@ describe Task::History do
       expect(File.exist?(rooms_dir)).to be_falsey
     end
   end
+
+  describe '#save', focus: true do
+    it 'Save room history to database' do
+      expect {
+        Task::History.new.invoke(:save, [], force: true)
+      }.not_to raise_error
+    end
+  end
 end

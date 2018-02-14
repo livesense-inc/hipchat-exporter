@@ -55,6 +55,16 @@ module Task
       say 'Room history JSON files are removed'
     end
 
+    desc 'save', 'Save the history of rooms to DB'
+    method_option :force, type: :boolean, default: false, desc: 'Skip asking questions'
+    def save
+      unless options[:force] || yes?("Save the history of rooms to DB? (y/N)", :yellow)
+        return say_abort
+      end
+
+      say 'History of rooms are saved to DB'
+    end
+
     no_commands do
       private
 
