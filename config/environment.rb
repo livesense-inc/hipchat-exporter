@@ -26,3 +26,8 @@ Dir[
 ].each do |file|
   load file
 end
+
+db_config_path = File.join(HipChatExporter::ROOT_PATH, 'config/database.yml')
+db_config = YAML.load(ERB.new(File.read(db_config_path)).result)[ENV['ENV'] || 'default']
+
+ActiveRecord::Base.establish_connection(db_config)

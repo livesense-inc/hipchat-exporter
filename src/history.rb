@@ -18,4 +18,21 @@ class History
     @room_id = room_id
     @items = items
   end
+
+  def save_messages
+    items.each do |item|
+      save_message(item)
+    end
+  end
+
+  def save_message(item)
+    Message.create(
+      room_id: self.room_id,
+      uuid: item['id'],
+      sender_mention_name: item['from']['mention_name'],
+      sender_name: item['from']['name'],
+      body: item['message'],
+      sent_at: item['date'],
+    )
+  end
 end

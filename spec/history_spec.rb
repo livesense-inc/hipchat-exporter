@@ -12,4 +12,29 @@ describe History do
       expect(history.items).to be_present
     end
   end
+
+  describe '#save_message' do
+    let(:history) { History.new(room_id: '1234567', items: []) }
+    let(:item) {
+      {
+        "date" => "2018-01-04T10:16:02.809766+00:00",
+        "from" =>
+          { "id" => 5309253,
+            "links" => { "self" => "https://api.hipchat.com/v2/user/5309253" },
+            "mention_name" => "micchie",
+            "name" => "白川 みちる(Michiru Shirakawa)",
+            "version" => "33J960AR" },
+        "id" => "5f7586a8-b71c-423c-ab11-bb2329d00201",
+        "mentions" => [],
+        "message" => "もう入り口あたりにいっちゃいます。エレベーターホール5Fにいます",
+        "type" => "message"
+      }
+    }
+
+    it 'saves a message to DB' do
+      expect {
+        history.save_message(item)
+      }.to change(Message, :count).by(1)
+    end
+  end
 end
