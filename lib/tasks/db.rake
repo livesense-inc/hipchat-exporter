@@ -11,9 +11,10 @@ namespace :db do
 
   desc "Create the database"
   task :create do
+    # See: gems/activerecord-5.1.4/lib/active_record/tasks/database_tasks.rb
     database_task = ActiveRecord::Tasks::MySQLDatabaseTasks.new(db_config)
     database_task.create
-    puts "Database #{db_config['database']} created"
+    puts "Created database #{db_config['database']}"
   end
 
   desc "Migrate the database"
@@ -46,6 +47,6 @@ namespace :db do
   task :drop do
     database_task = ActiveRecord::Tasks::MySQLDatabaseTasks.new(db_config)
     database_task.drop
-    puts "Database #{db_config['database']} deleted"
+    puts "Dropped database #{db_config['database']}"
   end
 end
