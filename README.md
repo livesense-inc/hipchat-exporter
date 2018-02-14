@@ -8,6 +8,7 @@ Export the history (messages) of rooms from HipChat.
 ## Requirements
 
 * Ruby 2.5.0
+* MySQL 5.6 (utf8mb4)
 
 ## Usage
 
