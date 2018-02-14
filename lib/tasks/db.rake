@@ -2,6 +2,10 @@ require 'erb'
 require 'yaml'
 
 namespace :db do
+  if ActiveRecord::Base.connected?
+    ActiveRecord::Base.connection_pool.disconnect!
+  end
+
   db_config_path = File.join(HipChatExporter::ROOT_PATH, 'config/database.yml')
   db_config = YAML.load(ERB.new(File.read(db_config_path)).result)[ENV['ENV'] || 'default']
   db_config_admin = db_config.merge({ 'database' => nil })
