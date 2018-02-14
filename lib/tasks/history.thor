@@ -62,6 +62,12 @@ module Task
         return say_abort
       end
 
+      Dir[File.join(rooms_dir, '**/history_*.json')].each do |history_json_path|
+        history = ::History.parse_json(history_json_path)
+        HipChatExporter.logger.info("Saving history of #{history.room_id}, #{File.basename(history_json_path)}", with_put: true)
+        history.save_messages
+      end
+
       say 'History of rooms are saved to DB'
     end
 

@@ -54,7 +54,7 @@ describe History do
 
       it 'saves a message to DB' do
         expect {
-          message = history.save_message(item)
+          history.save_message(item)
         }.to change(Message, :count).by(1)
       end
 

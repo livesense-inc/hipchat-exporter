@@ -29,10 +29,21 @@ describe Task::History do
   end
 
   describe '#save' do
-    it 'Save room history to database' do
+    let(:room_dir) { File.join(HipChatExporter::ROOT_PATH, 'spec/tmp/rooms/1234567') }
+
+    let(:fixture_history_json_path) {
+      File.join(HipChatExporter::ROOT_PATH, 'spec/fixtures/rooms/1234567/history_1234567890.json')
+    }
+
+    before do
+      FileUtils.mkdir_p(room_dir)
+      FileUtils.cp_r(fixture_history_json_path, File.join(room_dir, 'history_1234567890.json'))
+    end
+
+    it 'saves room history to database' do
       expect {
         Task::History.new.invoke(:save, [], force: true)
-      }.not_to raise_error
+      }.to change(Message, :count)
     end
   end
 end
