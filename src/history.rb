@@ -26,13 +26,12 @@ class History
   end
 
   def save_message(item)
-    Message.create(
-      room_id: self.room_id,
-      uuid: item['id'],
-      sender_mention_name: item['from']['mention_name'].presence || '(somebody)',
-      sender_name: item['from']['name'].presence || '(somebody)',
-      body: item['message'].presence || '(blank)',
-      sent_at: item['date'],
-    )
+    Message.find_or_create_by(uuid: item['id']) do |message|
+      message.room_id = self.room_id
+      message.sender_mention_name = item['from']['mention_name'].presence || '(somebody)'
+      message.sender_name = item['from']['name'].presence || '(somebody)'
+      message.body = item['message'].presence || '(blank)'
+      message.sent_at = item['date']
+    end
   end
 end

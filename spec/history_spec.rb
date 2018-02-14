@@ -48,7 +48,7 @@ describe History do
       end
     end
 
-    context 'when mention_name is blank' do
+    context 'when mention_name and/or name are blank' do
       let(:mention_name) { '' }
       let(:name) { '' }
 
@@ -62,6 +62,18 @@ describe History do
         message = history.save_message(item)
         expect(message.sender_mention_name).to eq '(somebody)'
         expect(message.sender_name).to eq '(somebody)'
+      end
+    end
+
+    context 'when same uuid message is already saved' do
+      before do
+        history.save_message(item)
+      end
+
+      it 'skips saving message' do
+        expect {
+          history.save_message(item)
+        }.not_to change(Message, :count)
       end
     end
   end
