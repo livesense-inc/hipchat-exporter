@@ -39,8 +39,8 @@ module Task
         message = "Exporting history of #{room.name} (#{room.id}) ..."
         HipChatExporter.logger.info(message, with_put: true, color: :cyan)
 
-        history = ::History.new(room)
-        history.export(from: from, to: to)
+        exporter = ::HistoryExporter.new(room)
+        exporter.perform(from: from, to: to)
       end
     end
 
@@ -53,6 +53,22 @@ module Task
 
       FileUtils.rm_r(rooms_dir) if File.exist?(rooms_dir)
       say 'Room history JSON files are removed'
+    end
+
+    desc 'save', 'Save the history of rooms to DB'
+    method_option :force, type: :boolean, default: false, desc: 'Skip asking questions'
+    def save
+      unless options[:force] || yes?("Save the history of rooms to DB? (y/N)", :yellow)
+        return say_abort
+      end
+
+      Dir[File.join(rooms_dir, '**/history_*.json')].each do |history_json_path|
+        history = ::History.parse_json(history_json_path)
+        HipChatExporter.logger.info("Saving history of #{history.room_id}, #{File.basename(history_json_path)}", with_put: true)
+        history.save_messages
+      end
+
+      say 'History of rooms are saved to DB'
     end
 
     no_commands do

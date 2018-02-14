@@ -8,10 +8,11 @@ Export the history (messages) of rooms from HipChat.
 ## Requirements
 
 * Ruby 2.5.0
+* MySQL 5.6.4+ (utf8mb4)
 
 ## Usage
 
-Export the history of rooms to JSON files.
+### (1) Export the history of rooms to JSON files
 
 ```
 # bundle exec thor help history:export
@@ -30,6 +31,12 @@ Example:
 bundle exec thor task:history:export --from=20171101 --to=20171107
 ```
 
+### (2) Save the history of rooms to DB
+
+```
+bundle exec thor task:history:save
+```
+
 ## Setup
 
 ```
@@ -39,6 +46,8 @@ cd hipchat-exporter
 
 ```
 bundle install --path vendor/bundle
+bundle exec rake db:create
+bundle exec rake db:migrate
 ```
 
 ```
