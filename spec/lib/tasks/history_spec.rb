@@ -8,10 +8,20 @@ describe Task::History do
       FileUtils.rm_r(rooms_dir) if File.exist?(rooms_dir)
     end
 
-    it 'creates room history JSON files' do
-      expect {
-        Task::History.new.invoke(:export, [], force: true, from: '20180101', to: '20180107')
-      }.to change { Dir[File.join(rooms_dir, '/*/history_*.json')].size }.by(2)
+    context 'when theads option is NOT set' do
+      it 'creates room history JSON files' do
+        expect {
+          Task::History.new.invoke(:export, [], force: true, from: '20180101', to: '20180107')
+        }.to change { Dir[File.join(rooms_dir, '/*/history_*.json')].size }.by(2)
+      end
+    end
+
+    context 'when theads option is set' do
+      it 'creates room history JSON files' do
+        expect {
+          Task::History.new.invoke(:export, [], force: true, from: '20180101', to: '20180107', threads: 2)
+        }.to change { Dir[File.join(rooms_dir, '/*/history_*.json')].size }.by(2)
+      end
     end
   end
 
