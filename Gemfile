@@ -7,6 +7,7 @@ git_source(:github) { |repo_name| "https://github.com/#{repo_name}" }
 gem 'activerecord'
 gem 'activesupport'
 gem 'colorize'
+gem 'database_cleaner'
 gem 'dotenv'
 gem 'hipchat'
 gem 'mysql2'

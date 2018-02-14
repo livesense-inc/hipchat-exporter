@@ -26,11 +26,25 @@ class History
   end
 
   def save_message(item)
+    sender_mention_name =
+      if item['from']['mention_name'].present?
+        item['from']['mention_name']
+      else
+        'somebody'
+      end
+
+    sender_name =
+      if item['from']['name'].present?
+        item['from']['name']
+      else
+        'somebody'
+      end
+
     Message.create(
       room_id: self.room_id,
       uuid: item['id'],
-      sender_mention_name: item['from']['mention_name'],
-      sender_name: item['from']['name'],
+      sender_mention_name: sender_mention_name,
+      sender_name: sender_name,
       body: item['message'],
       sent_at: item['date'],
     )

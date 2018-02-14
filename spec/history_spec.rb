@@ -15,14 +15,17 @@ describe History do
 
   describe '#save_message' do
     let(:history) { History.new(room_id: '1234567', items: []) }
+    let(:mention_name) { 'taro' }
+    let(:name) { '山田太郎（YAMADA Taro）' }
+
     let(:item) {
       {
         "date" => "2018-01-04T10:16:02.809766+00:00",
         "from" =>
           { "id" => 5309253,
             "links" => { "self" => "https://api.hipchat.com/v2/user/5309253" },
-            "mention_name" => "micchie",
-            "name" => "白川 みちる(Michiru Shirakawa)",
+            "mention_name" => mention_name,
+            "name" => name,
             "version" => "33J960AR" },
         "id" => "5f7586a8-b71c-423c-ab11-bb2329d00201",
         "mentions" => [],
@@ -31,10 +34,35 @@ describe History do
       }
     }
 
-    it 'saves a message to DB' do
-      expect {
-        history.save_message(item)
-      }.to change(Message, :count).by(1)
+    context 'when mention_name and name are present' do
+      it 'saves a message to DB' do
+        expect {
+          history.save_message(item)
+        }.to change(Message, :count).by(1)
+      end
+
+      it 'saves message attributes' do
+        message = history.save_message(item)
+        expect(message.sender_mention_name).to eq mention_name
+        expect(message.sender_name).to eq name
+      end
+    end
+
+    context 'when mention_name is blank' do
+      let(:mention_name) { '' }
+      let(:name) { '' }
+
+      it 'saves a message to DB' do
+        expect {
+          message = history.save_message(item)
+        }.to change(Message, :count).by(1)
+      end
+
+      it 'complements sender_mention_name and sender_name' do
+        message = history.save_message(item)
+        expect(message.sender_mention_name).to eq 'somebody'
+        expect(message.sender_name).to eq 'somebody'
+      end
     end
   end
 end
