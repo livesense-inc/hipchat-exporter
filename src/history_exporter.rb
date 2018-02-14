@@ -1,6 +1,6 @@
 require 'hipchat'
 
-class History
+class HistoryExporter
   MAX_RESULTS = 1000
 
   attr_reader :room, :client
@@ -10,11 +10,11 @@ class History
     @client = HipChat::Client.new(ENV['HIPCHAT_TOKEN'])
   end
 
-  def export(from: nil, to: nil)
+  def perform(from: nil, to: nil)
     result_hash = { next: true, next_date_offset: to }
 
     loop do
-      result_hash = export_part(from: from, to: result_hash[:next_date_offset])
+      result_hash = export(from: from, to: result_hash[:next_date_offset])
       break unless result_hash[:next]
     end
 
@@ -31,7 +31,7 @@ class History
 
   private
 
-  def export_part(from: nil, to: nil)
+  def export(from: nil, to: nil)
     file_path = file_path(timestamp: timestamp_from(to))
     FileUtils.mkdir_p(File.dirname(file_path))
 
@@ -74,13 +74,13 @@ class History
 
     message = "Fetching history of #{room.name} (#{room.id}), date: \"#{to}\""
     message += ", end-date: \"#{from}\"" if from.present?
-    message += ", max-results: #{History::MAX_RESULTS}"
+    message += ", max-results: #{HistoryExporter::MAX_RESULTS}"
 
     HipChatExporter.logger.info(message)
     puts message
 
     client[room.id].history(
-      :'max-results' => History::MAX_RESULTS,
+      :'max-results' => HistoryExporter::MAX_RESULTS,
       timezone: nil, # 401 Error if both timezone and end-date are set. (bug?)
       date: to,
       :'end-date' => from,
@@ -100,7 +100,7 @@ class History
     end
   end
 
-  def result_hash_from(response_body, expected_count: History::MAX_RESULTS)
+  def result_hash_from(response_body, expected_count: HistoryExporter::MAX_RESULTS)
     json = JSON.parse(response_body)
 
     if json['items'].count == expected_count

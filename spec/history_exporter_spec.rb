@@ -1,10 +1,10 @@
-describe History do
+describe HistoryExporter do
   let(:room_id) { 1944196 }
   let(:room) { Room.new(id: room_id) }
-  let(:history) { History.new(room) }
+  let(:exporter) { HistoryExporter.new(room) }
   let(:history_dir) { File.join(HipChatExporter::ROOT_PATH, 'spec/tmp/rooms', room_id.to_s) }
 
-  describe '#export' do
+  describe '#perform' do
     let(:from) { Time.zone.local(2017, 11, 1) }
     let(:to) { Time.zone.local(2017, 11, 7).end_of_day }
 
@@ -14,12 +14,12 @@ describe History do
 
     it 'exports room history to JSON files' do
       expect {
-        history.export(from: from, to: to)
+        exporter.perform(from: from, to: to)
       }.to change { Dir[File.join(history_dir, 'history_*.json')].size }
     end
   end
 
-  describe '#export_file' do
+  describe '#export' do
     let(:from) { Time.zone.local(2018, 1, 1) }
     let(:to) { Time.zone.local(2018, 1, 2).end_of_day }
 
@@ -29,7 +29,7 @@ describe History do
 
     it 'exports room history to JSON file' do
       expect {
-        history.send(:export_part, from: from, to: to)
+        exporter.send(:export, from: from, to: to)
       }.to change { Dir[File.join(history_dir, 'history_*.json')].size }
     end
   end
@@ -40,11 +40,11 @@ describe History do
 
     context 'with no exception' do
       it 'gets JSON response body' do
-        response_body = history.send(:fetch_with_rate_limit, from: from, to: to)
+        response_body = exporter.send(:fetch_with_rate_limit, from: from, to: to)
         json = JSON.parse(response_body)
 
         expect(json['items']).to be_present
-        expect(json['items'].count < History::MAX_RESULTS).to be_truthy
+        expect(json['items'].count < HistoryExporter::MAX_RESULTS).to be_truthy
       end
     end
 
@@ -55,14 +55,14 @@ describe History do
 
       before do
         allow(response).to receive(:headers).and_return(response_headers)
-        allow(history).to receive(:fetch).and_raise(exception)
+        allow(exporter).to receive(:fetch).and_raise(exception)
       end
 
       it 'handles HipChat::TooManyRequests and sleep' do
-        expect(history).to receive(:sleep).at_least(:once)
+        expect(exporter).to receive(:sleep).at_least(:once)
 
         expect {
-          history.send(:fetch_with_rate_limit, from: from, to: to)
+          exporter.send(:fetch_with_rate_limit, from: from, to: to)
         }.to raise_error(HipChat::TooManyRequests) # because of retrying fetch
       end
     end
@@ -73,16 +73,16 @@ describe History do
     let(:to) { Time.zone.local(2018, 1, 2).end_of_day }
 
     it 'gets JSON response body' do
-      response_body = history.send(:fetch, from: from, to: to)
+      response_body = exporter.send(:fetch, from: from, to: to)
       json = JSON.parse(response_body)
 
       expect(json['items']).to be_present
-      expect(json['items'].count < History::MAX_RESULTS).to be_truthy
+      expect(json['items'].count < HistoryExporter::MAX_RESULTS).to be_truthy
     end
   end
 
   describe '#timezone_from' do
-    subject { history.send(:timestamp_from, time) }
+    subject { exporter.send(:timestamp_from, time) }
 
     context 'when time class is Time (or TimeWithZone)' do
       let(:time) { Time.zone.local(2018, 2, 1) }
@@ -116,7 +116,7 @@ describe History do
       }.to_json
     }
 
-    subject { history.send(:result_hash_from, response_body, expected_count: expected_count) }
+    subject { exporter.send(:result_hash_from, response_body, expected_count: expected_count) }
 
     context 'when messages count == expected_count' do
       let(:expected_count) { 2 }

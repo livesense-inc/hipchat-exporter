@@ -28,7 +28,7 @@ describe Task::History do
     end
   end
 
-  describe '#save', focus: true do
+  describe '#save' do
     it 'Save room history to database' do
       expect {
         Task::History.new.invoke(:save, [], force: true)

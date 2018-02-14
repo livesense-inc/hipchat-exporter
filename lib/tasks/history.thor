@@ -39,8 +39,8 @@ module Task
         message = "Exporting history of #{room.name} (#{room.id}) ..."
         HipChatExporter.logger.info(message, with_put: true, color: :cyan)
 
-        history = ::History.new(room)
-        history.export(from: from, to: to)
+        exporter = ::HistoryExporter.new(room)
+        exporter.perform(from: from, to: to)
       end
     end
 
