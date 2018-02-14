@@ -22,13 +22,14 @@ Usage:
 Options:
   [--from=FROM]  # Date (or Time) like "20180101"
   [--to=TO]      # Date (or Time), like "20180131", default is Time.current
+  [--threads=N]  # Threads count for speedup blocking operations
   [--force]      # Skip asking questions
 ```
 
 Example:
 
 ```
-bundle exec thor task:history:export --from=20171101 --to=20171107
+bundle exec thor task:history:export --from=20171101 --to=20171107 --threads=20
 ```
 
 ### (2) Save the history of rooms to DB
