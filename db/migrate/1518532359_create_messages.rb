@@ -3,6 +3,7 @@ class CreateMessages < ActiveRecord::Migration[5.1]
     create_table :messages do |t|
       t.integer :room_id, null: false
       t.string :uuid, limit: 36, null: false
+      t.integer :sender_id, null: false
       t.string :sender_mention_name, null: false
       t.string :sender_name, null: false
       t.text :body, null: false
