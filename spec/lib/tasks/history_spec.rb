@@ -1,5 +1,3 @@
-load 'lib/tasks/history.thor'
-
 describe Task::History do
   describe '#export' do
     let(:rooms_dir) { File.join(HipChatExporter::ROOT_PATH, 'spec/tmp/rooms') }

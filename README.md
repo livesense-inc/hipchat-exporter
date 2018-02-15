@@ -41,10 +41,10 @@ Example:
 bundle exec thor task:history:export --from=20171101 --to=20171107 --threads=20
 ```
 
-### Step 2) Save the messages to DB
+### Step 2) Save the history of rooms to DB
 
 ```
-bundle exec thor task:message:save
+bundle exec thor task:history:save
 ```
 
 ### Step 3) Export the messages to CSV files
