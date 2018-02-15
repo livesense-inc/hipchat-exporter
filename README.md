@@ -5,10 +5,15 @@ HipChat Exporter
 
 Export the history (messages) of rooms from HipChat.
 
+## Motivation
+
+* [なぜ本ツールを作成するのか？（in Japanese）](https://github.com/livesense-inc/hipchat-exporter/issues/1)
+
 ## Requirements
 
 * Ruby 2.5.0
 * MySQL
+  * [Why this tool need a database? (in Japanese)](https://github.com/livesense-inc/hipchat-exporter/issues/6#issuecomment-364744048)
   * version 5.6.4+, why? -> The date in HipChat need microseconds (6 digits) precision
     * [MySQL :: MySQL 5.6 Reference Manual :: 11.3.6 Fractional Seconds in Time Values](https://dev.mysql.com/doc/refman/5.6/en/fractional-seconds.html)
     * [MySQL :: MySQL 5.6 リファレンスマニュアル :: 11.3.6 時間値での小数秒](https://dev.mysql.com/doc/refman/5.6/ja/fractional-seconds.html)
