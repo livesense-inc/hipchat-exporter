@@ -53,10 +53,21 @@ class HistoryExporter
     HipChatExporter.logger.error("Caught exception: #{e.class}, room_id: #{room.id}, room_name: #{room.name}, from: #{from}, to: #{to}", with_put: true)
     HipChatExporter.logger.error(e.message, with_put: true)
     HipChatExporter.logger.warn("X-Ratelimit-Reset: #{x_ratelimit_reset.to_s}", with_put: true)
-    HipChatExporter.logger.warn("Sleep until #{Time.zone.at(x_ratelimit_reset).to_s} and retry fetching ...", with_put: true)
 
-    until Time.current.to_i > x_ratelimit_reset
-      sleep 10
+    if x_ratelimit_reset == 60
+      # during rate limited
+      HipChatExporter.logger.warn('Sleep 300 and retry fetching ...', with_put: true)
+
+      # https://developer.atlassian.com/server/hipchat/hipchat-rest-api-rate-limits/
+      # Your add-on can make 500 API requests per 5 minutes
+      ENV['ENV'] == 'test' ? (sleep 1) : (sleep 300)
+    else
+      # x_ratelimit_reset is a UNIX timestamp
+      HipChatExporter.logger.warn("Sleep until #{Time.zone.at(x_ratelimit_reset).to_s} and retry fetching ...", with_put: true)
+
+      until Time.current.to_i > x_ratelimit_reset
+        ENV['ENV'] == 'test' ? (sleep 1) : (sleep 10)
+      end
     end
 
     fetch(from: from, to: to) # retry
