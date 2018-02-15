@@ -83,6 +83,12 @@ cp rooms.csv.example rooms.csv
 
 Fill room_id and room_name in `rooms.csv` (room_name is optional)
 
+## Debugging
+
+```
+bundle exec pry
+```
+
 ## Testing
 
 ```
