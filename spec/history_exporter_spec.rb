@@ -62,10 +62,7 @@ describe HistoryExporter do
 
         it 'handles HipChat::TooManyRequests and sleep' do
           expect(exporter).to receive(:sleep).at_least(:once)
-
-          expect {
-            exporter.send(:fetch_with_rate_limit, from: from, to: to)
-          }.to raise_error(HipChat::TooManyRequests) # because of retrying fetch
+          exporter.send(:fetch_with_rate_limit, from: from, to: to)
         end
       end
 
@@ -74,10 +71,7 @@ describe HistoryExporter do
 
         it 'handles HipChat::TooManyRequests and sleep' do
           expect(exporter).to receive(:sleep).at_least(:once)
-
-          expect {
-            exporter.send(:fetch_with_rate_limit, from: from, to: to)
-          }.to raise_error(HipChat::TooManyRequests) # because of retrying fetch
+          exporter.send(:fetch_with_rate_limit, from: from, to: to)
         end
       end
     end

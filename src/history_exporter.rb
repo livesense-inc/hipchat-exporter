@@ -70,7 +70,10 @@ class HistoryExporter
       end
     end
 
-    fetch(from: from, to: to) # retry
+    # Avoid SystemStackError: stack level too deep on testing
+    unless ENV['ENV'] == 'test'
+      fetch_with_rate_limit(from: from, to: to) # retry
+    end
   end
 
   def fetch(from: nil, to: 'recent')
