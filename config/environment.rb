@@ -7,7 +7,7 @@ require 'pry'
 require 'rake'
 
 ENV['TIME_ZONE'] ||= 'Etc/UTC'
-Time.zone = ENV['TIME_ZONE']
+Time.zone_default = Time.find_zone!(ENV['TIME_ZONE'])
 
 module HipChatExporter
   ROOT_PATH = File.expand_path('../', __dir__)

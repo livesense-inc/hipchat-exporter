@@ -50,7 +50,6 @@ describe HistoryExporter do
 
     context 'with HipChat::TooManyRequests from fetch method' do
       let(:response) { double('Error response') }
-      let(:response_headers) { { 'x-ratelimit-reset' => 10.seconds.from_now.to_i.to_s } }
       let(:exception) { HipChat::TooManyRequests.new('You have exceeded the rate limit.', response: response) }
 
       before do
@@ -58,12 +57,22 @@ describe HistoryExporter do
         allow(exporter).to receive(:fetch).and_raise(exception)
       end
 
-      it 'handles HipChat::TooManyRequests and sleep' do
-        expect(exporter).to receive(:sleep).at_least(:once)
+      context 'when x-ratelimit-reset is a unix timestamp' do
+        let(:response_headers) { { 'x-ratelimit-reset' => 10.seconds.from_now.to_i.to_s } }
 
-        expect {
+        it 'handles HipChat::TooManyRequests and sleep' do
+          expect(exporter).to receive(:sleep).at_least(:once)
           exporter.send(:fetch_with_rate_limit, from: from, to: to)
-        }.to raise_error(HipChat::TooManyRequests) # because of retrying fetch
+        end
+      end
+
+      context 'when x-ratelimit-reset is "60"' do
+        let(:response_headers) { { 'x-ratelimit-reset' => '60' } }
+
+        it 'handles HipChat::TooManyRequests and sleep' do
+          expect(exporter).to receive(:sleep).at_least(:once)
+          exporter.send(:fetch_with_rate_limit, from: from, to: to)
+        end
       end
     end
   end
