@@ -10,8 +10,26 @@ module Task
       end
 
       say 'Exporting messages to CSV files ...'
+
+      if File.exist?(::Message.dist_dir)
+        FileUtils.rm_r(::Message.dist_dir)
+      end
+
       ::Message.export_csv
+
       say 'Messages are exported to CSV files'
+    end
+
+    desc 'clear', 'Remove messages CSV files'
+    method_option :force, type: :boolean, default: false, desc: 'Skip asking questions'
+    def clear
+      unless options[:force] || yes?('Remove messages CSV files? (y/N)', :yellow)
+        return say_abort
+      end
+
+      FileUtils.rm_r(::Message.dist_dir) if File.exist?(::Message.dist_dir)
+
+      say 'Message CSV files are removed'
     end
 
     no_commands do

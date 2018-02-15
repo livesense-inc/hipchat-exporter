@@ -24,8 +24,6 @@ class Message < ActiveRecord::Base
       end
     end
 
-    private
-
     def dist_dir
       if ENV['ENV'] == 'test'
         File.join(HipChatExporter::ROOT_PATH, 'tmp/dist')
@@ -33,6 +31,8 @@ class Message < ActiveRecord::Base
         File.join(HipChatExporter::ROOT_PATH, 'dist')
       end
     end
+
+    private
 
     def csv_path(page)
       File.join(dist_dir, "messages_#{page}.csv")
