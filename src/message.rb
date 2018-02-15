@@ -5,8 +5,8 @@ class Message < ActiveRecord::Base
 
       CSV.open(csv_path, 'w') do |csv|
         # Because find_each method does not support order
-        Message.order(:sent_at).select(:room_id, :sender_name, :body, :sent_at).each do |message|
-          csv << [message.sent_at.to_i, message.room_id, message.sender_name, message.body]
+        Message.order(:sent_at).pluck(:sent_at, :room_id, :sender_name, :body).each do |message|
+          csv << [message[0].to_i, message[1], message[2], message[3]]
         end
       end
     end
