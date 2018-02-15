@@ -8,7 +8,11 @@ Export the history (messages) of rooms from HipChat.
 ## Requirements
 
 * Ruby 2.5.0
-* MySQL 5.6.4+ (utf8mb4)
+* MySQL
+  * version 5.6.4+, why? -> The date in HipChat need microseconds (6 digits) precision
+    * [MySQL :: MySQL 5.6 Reference Manual :: 11.3.6 Fractional Seconds in Time Values](https://dev.mysql.com/doc/refman/5.6/en/fractional-seconds.html)
+    * [MySQL :: MySQL 5.6 リファレンスマニュアル :: 11.3.6 時間値での小数秒](https://dev.mysql.com/doc/refman/5.6/ja/fractional-seconds.html)
+  * utf8mb4, why? -> The messages in HipChat include emoji
 
 ## Usage
 
