@@ -5,8 +5,9 @@
 #   git config --global core.excludesfile '~/.gitignore_global'
 
 /.bundle/
-/spec/tmp/
+/dist/
 /log/
+/spec/tmp/
 /tmp/
 /vendor/
 

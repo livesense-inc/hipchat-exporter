@@ -9,6 +9,8 @@ module Task
         return say_abort
       end
 
+      say 'Exporting messages to CSV files ...'
+      ::Message.export_csv
       say 'Messages are exported to CSV files'
     end
 
