@@ -5,13 +5,13 @@ describe Message do
     end
 
     after do
-      FileUtils.rm(Dir[File.join(Message.dist_dir, 'messages_*.csv')])
+      FileUtils.rm_r(Dir[File.join(Message.dist_dir, '*')])
     end
 
     it 'exports messages to CSV files' do
       expect {
         Message.export_csv
-      }.to change { Dir[File.join(Message.dist_dir, 'messages_*.csv')].size }
+      }.to change { Dir[File.join(Message.dist_dir, '**/messages_*.csv')].size }
     end
   end
 end

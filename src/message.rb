@@ -19,15 +19,16 @@ class Message < ActiveRecord::Base
 
   class << self
     def export_csv
-      FileUtils.mkdir_p(dist_dir)
-
+      current = Time.current
       page = 1
+
+      FileUtils.mkdir_p(current_dir(current))
 
       loop do
         offset = (page - 1) * Message::BATCH_SIZE
         messages = Message.order(:sent_at).offset(offset).limit(Message::BATCH_SIZE)
 
-        CSV.open(csv_path(page), 'w') do |csv|
+        CSV.open(csv_path(current_dir: current_dir(current), page: page), 'w') do |csv|
           messages.pluck(:sent_at, :room_id, :sender_name, :body).each do |message|
             csv << [message[0].to_i, "room_#{message[1]}", message[2], message[3]]
           end
@@ -51,8 +52,12 @@ class Message < ActiveRecord::Base
 
     private
 
-    def csv_path(page)
-      File.join(dist_dir, "messages_#{page}.csv")
+    def current_dir(current = Time.current)
+      File.join(dist_dir, current.strftime('%Y%m%d%H%M%S'))
+    end
+
+    def csv_path(current_dir:, page:)
+      File.join(current_dir, "messages_#{page}.csv")
     end
   end
 end
