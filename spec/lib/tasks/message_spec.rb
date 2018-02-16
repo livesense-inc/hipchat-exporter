@@ -1,9 +1,17 @@
 describe Task::Message do
   describe '#export' do
-    it 'raises no error' do
+    before do
+      create_list(:message, 2)
+    end
+
+    after do
+      FileUtils.rm(Dir[File.join(Message.dist_dir, 'messages_*.csv')])
+    end
+
+    it 'exports messages to CSV files' do
       expect {
         Task::Message.new.invoke(:export, [], force: true)
-      }.not_to raise_error
+      }.to change { Dir[File.join(Message.dist_dir, 'messages_*.csv')].size }
     end
   end
 end
