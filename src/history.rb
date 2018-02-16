@@ -12,6 +12,14 @@ class History
         items: json['items'],
       )
     end
+
+    def rooms_dir
+      if ENV['ENV'] == 'test'
+        File.join(HipChatExporter::ROOT_PATH, "spec/tmp/rooms")
+      else
+        File.join(HipChatExporter::ROOT_PATH, "tmp/rooms")
+      end
+    end
   end
 
   def initialize(room_id:, items:)

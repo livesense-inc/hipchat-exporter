@@ -125,10 +125,6 @@ class HistoryExporter
   end
 
   def file_path(timestamp:)
-    if ENV['ENV'] == 'test'
-      File.join(HipChatExporter::ROOT_PATH, "spec/tmp/rooms/#{room.id}/history_#{timestamp}.json")
-    else
-      File.join(HipChatExporter::ROOT_PATH, "tmp/rooms/#{room.id}/history_#{timestamp}.json")
-    end
+    File.join(History.rooms_dir, "#{room.id}/history_#{timestamp}.json")
   end
 end

@@ -1,16 +1,14 @@
 describe Task::History do
   describe '#export' do
-    let(:rooms_dir) { File.join(HipChatExporter::ROOT_PATH, 'spec/tmp/rooms') }
-
     after do
-      FileUtils.rm_r(rooms_dir) if File.exist?(rooms_dir)
+      FileUtils.rm_r(Dir[File.join(History.rooms_dir, '*')])
     end
 
     context 'when theads option is NOT set' do
       it 'creates room history JSON files' do
         expect {
           Task::History.new.invoke(:export, [], force: true, from: '20180101', to: '20180107')
-        }.to change { Dir[File.join(rooms_dir, '/*/history_*.json')].size }.by(2)
+        }.to change { Dir[File.join(History.rooms_dir, '**/history_*.json')].size }.by(2)
       end
     end
 
@@ -18,26 +16,26 @@ describe Task::History do
       it 'creates room history JSON files' do
         expect {
           Task::History.new.invoke(:export, [], force: true, from: '20180101', to: '20180107', threads: 2)
-        }.to change { Dir[File.join(rooms_dir, '/*/history_*.json')].size }.by(2)
+        }.to change { Dir[File.join(History.rooms_dir, '**/history_*.json')].size }.by(2)
       end
     end
   end
 
   describe '#clear' do
-    let(:rooms_dir) { File.join(HipChatExporter::ROOT_PATH, 'spec/tmp/rooms') }
+    let(:room_dir) { File.join(History.rooms_dir, '1234567') }
 
     before do
-      FileUtils.mkdir_p(rooms_dir)
+      FileUtils.mkdir_p(room_dir)
     end
 
     it 'removes rooms dir' do
       Task::History.new.invoke(:clear, [], force: true)
-      expect(File.exist?(rooms_dir)).to be_falsey
+      expect(File.exist?(room_dir)).to be_falsey
     end
   end
 
   describe '#save' do
-    let(:room_dir) { File.join(HipChatExporter::ROOT_PATH, 'spec/tmp/rooms/1234567') }
+    let(:room_dir) { File.join(History.rooms_dir, '1234567') }
 
     let(:fixture_history_json_path) {
       File.join(HipChatExporter::ROOT_PATH, 'spec/fixtures/rooms/1234567/history_1234567890.json')
