@@ -1,14 +1,15 @@
 class Message < ActiveRecord::Base
+  BATCH_SIZE = 100_000
+
   class << self
     def export_csv
       FileUtils.mkdir_p(dist_dir)
 
       page = 1
-      batch_size = 100_000
 
       loop do
-        offset = (page - 1) * batch_size
-        messages = Message.order(:sent_at).offset(offset).limit(batch_size)
+        offset = (page - 1) * Message::BATCH_SIZE
+        messages = Message.order(:sent_at).offset(offset).limit(Message::BATCH_SIZE)
 
         CSV.open(csv_path(page), 'w') do |csv|
           messages.pluck(:sent_at, :room_id, :sender_name, :body).each do |message|
@@ -16,7 +17,7 @@ class Message < ActiveRecord::Base
           end
         end
 
-        if messages.count < batch_size
+        if messages.count < Message::BATCH_SIZE
           break
         else
           page += 1
@@ -26,7 +27,7 @@ class Message < ActiveRecord::Base
 
     def dist_dir
       if ENV['ENV'] == 'test'
-        File.join(HipChatExporter::ROOT_PATH, 'tmp/dist')
+        File.join(HipChatExporter::ROOT_PATH, 'spec/dist')
       else
         File.join(HipChatExporter::ROOT_PATH, 'dist')
       end
