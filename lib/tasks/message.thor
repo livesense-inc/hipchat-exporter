@@ -9,11 +9,13 @@ module Task
         return say_abort
       end
 
+      unless options[:force] || yes?('Remove messages CSV files before export? (y/N)', :yellow)
+        return say_abort
+      end
+
       say 'Exporting messages to CSV files ...'
 
-      if File.exist?(::Message.dist_dir)
-        FileUtils.rm_r(::Message.dist_dir)
-      end
+      FileUtils.rm(Dir[File.join(::Message.dist_dir, 'messages_*.csv')])
 
       ::Message.export_csv
 
@@ -27,7 +29,7 @@ module Task
         return say_abort
       end
 
-      FileUtils.rm_r(::Message.dist_dir) if File.exist?(::Message.dist_dir)
+      FileUtils.rm(Dir[File.join(::Message.dist_dir, 'messages_*.csv')])
 
       say 'Message CSV files are removed'
     end
