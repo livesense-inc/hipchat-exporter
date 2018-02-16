@@ -53,6 +53,8 @@ bundle exec thor task:history:save
 bundle exec thor task:message:export
 ```
 
+The messages CSV files are exported to `dist` directory.
+
 ### Step 4) Import messages CSV files to Slack
 
 * [Import message history – Slack Help Center](https://get.slack.help/hc/en-us/articles/201748703-Import-message-history)
