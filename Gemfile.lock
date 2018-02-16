@@ -12,6 +12,9 @@ GEM
       i18n (~> 0.7)
       minitest (~> 5.1)
       tzinfo (~> 1.1)
+    annotate (2.7.2)
+      activerecord (>= 3.2, < 6.0)
+      rake (>= 10.4, < 13.0)
     arel (8.0.0)
     coderay (1.1.2)
     colorize (0.8.1)
@@ -62,6 +65,7 @@ PLATFORMS
 DEPENDENCIES
   activerecord
   activesupport
+  annotate
   colorize
   database_cleaner
   dotenv
