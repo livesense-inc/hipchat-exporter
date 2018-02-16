@@ -29,7 +29,7 @@ class Message < ActiveRecord::Base
 
         CSV.open(csv_path(page), 'w') do |csv|
           messages.pluck(:sent_at, :room_id, :sender_name, :body).each do |message|
-            csv << [message[0].to_i, message[1], message[2], message[3]]
+            csv << [message[0].to_i, "room_#{message[1]}", message[2], message[3]]
           end
         end
 
