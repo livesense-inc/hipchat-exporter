@@ -60,8 +60,8 @@ describe History do
 
       it 'complements sender_mention_name and sender_name' do
         message = history.save_message(item)
-        expect(message.sender_mention_name).to eq '(unknown)'
-        expect(message.sender_name).to eq '(unknown)'
+        expect(message.sender_mention_name).to eq 'unknown'
+        expect(message.sender_name).to eq 'unknown'
       end
     end
 
