@@ -2,20 +2,19 @@ describe HistoryExporter do
   let(:room_id) { 1944196 }
   let(:room) { Room.new(id: room_id) }
   let(:exporter) { HistoryExporter.new(room) }
-  let(:history_dir) { File.join(HipChatExporter::ROOT_PATH, 'spec/tmp/rooms', room_id.to_s) }
 
   describe '#perform' do
     let(:from) { Time.zone.local(2017, 11, 1) }
     let(:to) { Time.zone.local(2017, 11, 7).end_of_day }
 
     after do
-      FileUtils.rm_r(history_dir)
+      FileUtils.rm_r(Dir[File.join(History.rooms_dir, '*')])
     end
 
     it 'exports room history to JSON files' do
       expect {
         exporter.perform(from: from, to: to)
-      }.to change { Dir[File.join(history_dir, 'history_*.json')].size }
+      }.to change { Dir[File.join(History.rooms_dir, '**/history_*.json')].size }
     end
   end
 
@@ -24,13 +23,13 @@ describe HistoryExporter do
     let(:to) { Time.zone.local(2018, 1, 2).end_of_day }
 
     after do
-      FileUtils.rm_r(history_dir)
+      FileUtils.rm_r(Dir[File.join(History.rooms_dir, '*')])
     end
 
     it 'exports room history to JSON file' do
       expect {
         exporter.send(:export, from: from, to: to)
-      }.to change { Dir[File.join(history_dir, 'history_*.json')].size }
+      }.to change { Dir[File.join(History.rooms_dir, '**/history_*.json')].size }
     end
   end
 

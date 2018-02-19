@@ -18,6 +18,10 @@ ENV['ENV'] = 'test'
 
 require File.expand_path('../../config/environment', __FILE__)
 
+Dir[File.join(HipChatExporter::ROOT_PATH, 'spec/support/**/*.rb')].each do |file|
+  require file
+end
+
 require 'database_cleaner'
 
 RSpec.configure do |config|
