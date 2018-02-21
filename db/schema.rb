@@ -10,11 +10,12 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 1518532359) do
+ActiveRecord::Schema.define(version: 1519218735) do
 
   create_table "messages", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4" do |t|
     t.integer "room_id", null: false
     t.string "uuid", limit: 36, null: false
+    t.integer "sender_id", null: false
     t.string "sender_mention_name", null: false
     t.string "sender_name", null: false
     t.text "body", null: false
@@ -23,6 +24,16 @@ ActiveRecord::Schema.define(version: 1518532359) do
     t.datetime "updated_at", null: false
     t.index ["sent_at"], name: "index_messages_on_sent_at"
     t.index ["uuid"], name: "index_messages_on_uuid", unique: true
+  end
+
+  create_table "rooms", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4" do |t|
+    t.integer "room_id", null: false
+    t.string "name", null: false
+    t.string "privacy", limit: 16, null: false
+    t.boolean "archived", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["room_id"], name: "index_rooms_on_room_id", unique: true
   end
 
 end
