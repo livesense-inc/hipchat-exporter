@@ -12,7 +12,6 @@
 
 FactoryBot.define do
   factory :room do
-    sequence(:room_id) { |n| n }
     name 'My room'
     privacy 'public'
     archived false

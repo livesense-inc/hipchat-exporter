@@ -1,7 +1,7 @@
 describe Task::History do
   describe '#export' do
-    let!(:room1) { create(:room, room_id: 1944196) }
-    let!(:room2) { create(:room, room_id: 4337418) }
+    let!(:room1) { create(:room, id: 1944196) }
+    let!(:room2) { create(:room, id: 4337418) }
 
     after do
       FileUtils.rm_r(Dir[File.join(History.rooms_dir, '*')])

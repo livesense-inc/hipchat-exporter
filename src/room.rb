@@ -11,12 +11,12 @@
 #
 
 class Room < ActiveRecord::Base
-  has_many :messages, foreign_key: :room_id
+  has_many :messages
 
   class << self
     def parse_csv!
       CSV.open(rooms_csv_path).map do |row|
-        Room.find_by!(room_id: row[0].strip)
+        Room.find(row[0].strip)
       end
     end
 

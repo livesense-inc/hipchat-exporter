@@ -1,7 +1,7 @@
 describe Room do
   describe '.parse_csv!' do
-    let!(:room1) { create(:room, room_id: 1944196) }
-    let!(:room2) { create(:room, room_id: 4337418) }
+    let!(:room1) { create(:room, id: 1944196) }
+    let!(:room2) { create(:room, id: 4337418) }
 
     it 'parse csv file and find rooms' do
       rooms = Room.parse_csv!

@@ -22,7 +22,7 @@
 class Message < ActiveRecord::Base
   BATCH_SIZE = 100_000
 
-  belongs_to :room, foreign_key: :room_id
+  belongs_to :room
 
   class << self
     def export_csv

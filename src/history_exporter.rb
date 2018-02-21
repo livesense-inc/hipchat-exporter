@@ -19,7 +19,7 @@ class HistoryExporter
     end
 
   rescue => e
-    HipChatExporter.logger.error("Caught exception: #{e.class}, room_id: #{room.room_id}, room_name: #{room.name}, from: #{from}, to: #{to}", with_put: true)
+    HipChatExporter.logger.error("Caught exception: #{e.class}, room_id: #{room.id}, room_name: #{room.name}, from: #{from}, to: #{to}", with_put: true)
     HipChatExporter.logger.error(e.message, with_put: true)
 
     e.backtrace.each do |row|
@@ -50,7 +50,7 @@ class HistoryExporter
   rescue HipChat::TooManyRequests => e
     x_ratelimit_reset = e.response.headers['x-ratelimit-reset'].to_i
 
-    HipChatExporter.logger.error("Caught exception: #{e.class}, room_id: #{room.room_id}, room_name: #{room.name}, from: #{from}, to: #{to}", with_put: true)
+    HipChatExporter.logger.error("Caught exception: #{e.class}, room_id: #{room.id}, room_name: #{room.name}, from: #{from}, to: #{to}", with_put: true)
     HipChatExporter.logger.error(e.message, with_put: true)
     HipChatExporter.logger.warn("X-Ratelimit-Reset: #{x_ratelimit_reset.to_s}", with_put: true)
 
@@ -86,14 +86,14 @@ class HistoryExporter
     from = utc_iso8601(from)
     to = utc_iso8601(to)
 
-    message = "Fetching history of #{room.name} (#{room.room_id}), date: \"#{to}\""
+    message = "Fetching history of #{room.name} (#{room.id}), date: \"#{to}\""
     message += ", end-date: \"#{from}\"" if from.present?
     message += ", max-results: #{HistoryExporter::MAX_RESULTS}"
 
     HipChatExporter.logger.info(message)
     puts message
 
-    client[room.room_id].history(
+    client[room.id].history(
       :'max-results' => HistoryExporter::MAX_RESULTS,
       timezone: nil, # 401 Error if both timezone and end-date are set. (bug?)
       date: to,
@@ -125,6 +125,6 @@ class HistoryExporter
   end
 
   def file_path(timestamp:)
-    File.join(History.rooms_dir, "#{room.room_id}/history_#{timestamp}.json")
+    File.join(History.rooms_dir, "#{room.id}/history_#{timestamp}.json")
   end
 end
