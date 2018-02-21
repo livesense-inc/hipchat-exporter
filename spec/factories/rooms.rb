@@ -12,7 +12,7 @@
 
 FactoryBot.define do
   factory :room do
-    name 'My room'
+    name { "room_#{id}" }
     privacy 'public'
     archived false
   end

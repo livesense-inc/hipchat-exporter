@@ -33,11 +33,11 @@ class Message < ActiveRecord::Base
 
       loop do
         offset = (page - 1) * Message::BATCH_SIZE
-        messages = Message.order(:sent_at).offset(offset).limit(Message::BATCH_SIZE)
+        messages = Message.includes(:room).order(:sent_at).offset(offset).limit(Message::BATCH_SIZE)
 
         CSV.open(csv_path(current_dir: current_dir(current), page: page), 'w') do |csv|
-          messages.pluck(:sent_at, :room_id, :sender_name, :body).each do |message|
-            csv << [message[0].to_i, "room_#{message[1]}", message[2], message[3]]
+          messages.each do |message|
+            csv << [message.sent_at.to_i, message.room.name, message.sender_name, message.body]
           end
         end
 
