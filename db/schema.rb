@@ -27,13 +27,11 @@ ActiveRecord::Schema.define(version: 1519218735) do
   end
 
   create_table "rooms", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4" do |t|
-    t.integer "room_id", null: false
     t.string "name", null: false
     t.string "privacy", limit: 16, null: false
     t.boolean "archived", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["room_id"], name: "index_rooms_on_room_id", unique: true
   end
 
 end

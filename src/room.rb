@@ -3,16 +3,11 @@
 # Table name: rooms
 #
 #  id         :integer          not null, primary key
-#  room_id    :integer          not null
 #  name       :string(255)      not null
 #  privacy    :string(16)       not null
 #  archived   :boolean          not null
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
-#
-# Indexes
-#
-#  index_rooms_on_room_id  (room_id) UNIQUE
 #
 
 class Room < ActiveRecord::Base
