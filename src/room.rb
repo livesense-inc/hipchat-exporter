@@ -10,8 +10,14 @@
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
 #
+# Indexes
+#
+#  index_rooms_on_room_id  (room_id) UNIQUE
+#
 
 class Room < ActiveRecord::Base
+  has_many :messages, foreign_key: :room_id
+
   class << self
     def parse_csv!
       CSV.open(rooms_csv_path).map do |row|

@@ -10,6 +10,10 @@
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
 #
+# Indexes
+#
+#  index_rooms_on_room_id  (room_id) UNIQUE
+#
 
 FactoryBot.define do
   factory :room do

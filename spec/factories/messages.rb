@@ -13,6 +13,11 @@
 #  created_at          :datetime         not null
 #  updated_at          :datetime         not null
 #
+# Indexes
+#
+#  index_messages_on_sent_at  (sent_at)
+#  index_messages_on_uuid     (uuid) UNIQUE
+#
 
 FactoryBot.define do
   factory :message do

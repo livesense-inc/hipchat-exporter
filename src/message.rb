@@ -13,9 +13,16 @@
 #  created_at          :datetime         not null
 #  updated_at          :datetime         not null
 #
+# Indexes
+#
+#  index_messages_on_sent_at  (sent_at)
+#  index_messages_on_uuid     (uuid) UNIQUE
+#
 
 class Message < ActiveRecord::Base
   BATCH_SIZE = 100_000
+
+  belongs_to :room, foreign_key: :room_id
 
   class << self
     def export_csv
