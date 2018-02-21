@@ -1,17 +1,22 @@
-class Room
-  attr_accessor :id, :name
+# == Schema Information
+#
+# Table name: rooms
+#
+#  id         :integer          not null, primary key
+#  room_id    :integer          not null
+#  name       :string(255)      not null
+#  privacy    :string(16)       not null
+#  archived   :boolean          not null
+#  created_at :datetime         not null
+#  updated_at :datetime         not null
+#
 
+class Room < ActiveRecord::Base
   class << self
     def parse_csv
       CSV.open(rooms_csv_path).map do |row|
-        generate(row)
+        Room.find_by(room_id: row[0].strip)
       end
-    end
-
-    def generate(csv_row)
-      data = { id: csv_row[0].strip }
-      data[:name] = csv_row[1].strip if csv_row[1].present?
-      self.new(data)
     end
 
     def rooms_csv_path
@@ -21,10 +26,5 @@ class Room
         File.join(HipChatExporter::ROOT_PATH, 'rooms.csv')
       end
     end
-  end
-
-  def initialize(id:, name: nil)
-    self.id = id
-    self.name = name || "room_#{id}"
   end
 end
