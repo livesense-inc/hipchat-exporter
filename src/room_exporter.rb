@@ -10,11 +10,14 @@ class RoomExporter
   end
 
   def perform
-    rooms = []
     offset = 0
 
     loop do
-      rooms += fetch(offset: offset)
+      rooms = fetch(offset: offset)
+
+      rooms.each do |room|
+        save(room)
+      end
 
       if rooms.size == RoomExporter::MAX_RESULTS
         offset += RoomExporter::MAX_RESULTS
@@ -22,8 +25,6 @@ class RoomExporter
         break
       end
     end
-
-    rooms
   end
 
   private
@@ -35,6 +36,15 @@ class RoomExporter
       :'max-results' => RoomExporter::MAX_RESULTS,
       :'include-private' => true,
       :'include-archived' => false,
+    )
+  end
+
+  def save(room)
+    Room.create(
+      room_id: room.room_id,
+      name: room.name,
+      privacy: room.privacy,
+      archived: room.is_archived,
     )
   end
 end
