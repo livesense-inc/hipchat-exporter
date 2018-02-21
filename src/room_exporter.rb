@@ -40,11 +40,11 @@ class RoomExporter
   end
 
   def save(room)
-    Room.create(
-      room_id: room.room_id,
-      name: room.name,
-      privacy: room.privacy,
-      archived: room.is_archived,
-    )
+    Room.find_or_create_by(room_id: room.room_id) do |r|
+      r.room_id = room.room_id
+      r.name = room.name
+      r.privacy = room.privacy
+      r.archived = room.is_archived
+    end
   end
 end
