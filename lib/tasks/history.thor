@@ -37,7 +37,7 @@ module Task
         end
       end
 
-      rooms = Room.parse_csv
+      rooms = Room.parse_csv!
 
       if options[:threads]
         Parallel.each(rooms, in_threads: options[:threads]) do |room|
@@ -81,7 +81,7 @@ module Task
       private
 
       def export_room(room, from:, to:)
-        message = "Exporting history of #{room.name} (#{room.id}) ..."
+        message = "Exporting history of #{room.name} (#{room.room_id}) ..."
         HipChatExporter.logger.info(message, with_put: true, color: :cyan)
 
         exporter = ::HistoryExporter.new(room)

@@ -17,7 +17,7 @@ describe RoomExporter do
 
       expect(rooms.size).to be > 1
       expect(room).to be_an_instance_of(HipChat::Room)
-      expect(room.id).to be > 0
+      expect(room.room_id).to be > 0
       expect(room.name).to be_present
       expect(room.privacy).to match(/\A(private|public)\z/)
       expect(room.respond_to?(:is_archived)).to be_truthy
