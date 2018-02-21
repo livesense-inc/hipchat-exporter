@@ -2,11 +2,10 @@ describe RoomExporter do
   let(:exporter) { RoomExporter.new }
 
   describe '#perform' do
-    it 'gets HipChat::Room array' do
-      rooms = exporter.perform
-
-      expect(rooms.size).to be > RoomExporter::MAX_RESULTS
-      expect(rooms.first).to be_an_instance_of(HipChat::Room)
+    it 'fetches rooms and saves them to DB' do
+      expect {
+        exporter.perform
+      }.to change(Room, :count)
     end
   end
 

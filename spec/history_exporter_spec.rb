@@ -1,6 +1,6 @@
 describe HistoryExporter do
   let(:room_id) { 1944196 }
-  let(:room) { Room.new(id: room_id) }
+  let(:room) { build(:room, id: room_id) }
   let(:exporter) { HistoryExporter.new(room) }
 
   describe '#perform' do

@@ -13,15 +13,21 @@
 #  created_at          :datetime         not null
 #  updated_at          :datetime         not null
 #
+# Indexes
+#
+#  index_messages_on_sent_at  (sent_at)
+#  index_messages_on_uuid     (uuid) UNIQUE
+#
 
 FactoryBot.define do
   factory :message do
-    sequence(:room_id) { |n| n }
     sequence(:uuid) { |n| n }
     sequence(:sender_id) { |n| n }
     sender_mention_name 'taro'
     sender_name 'YAMADA Taro'
     body 'Hello, world'
     sent_at { 1.day.ago }
+
+    room
   end
 end

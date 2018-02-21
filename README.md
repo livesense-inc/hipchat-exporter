@@ -21,7 +21,13 @@ Export the history (messages) of rooms from HipChat.
 
 ## Usage
 
-### Step 1) Export the history of rooms to JSON files
+### Step 1) Export rooms and save them to DB
+
+```
+bundle exec thor task:room:export
+```
+
+### Step 2) Export the history of rooms to JSON files
 
 ```
 # bundle exec thor help history:export
@@ -41,13 +47,13 @@ Example:
 bundle exec thor task:history:export --from=20171101 --to=20171107 --threads=20
 ```
 
-### Step 2) Save the history of rooms to DB
+### Step 3) Save the history of rooms to DB
 
 ```
 bundle exec thor task:history:save
 ```
 
-### Step 3) Export the messages to CSV files
+### Step 4) Export the messages to CSV files
 
 ```
 bundle exec thor task:message:export
@@ -55,7 +61,7 @@ bundle exec thor task:message:export
 
 The messages CSV files are exported to `dist` directory.
 
-### Step 4) Import messages CSV files to Slack
+### Step 5) Import messages CSV files to Slack
 
 * [Import message history – Slack Help Center](https://get.slack.help/hc/en-us/articles/201748703-Import-message-history)
 * [メッセージ履歴をインポートする（Japanese）](https://get.slack.help/hc/ja/articles/201748703-%E3%83%A1%E3%83%83%E3%82%BB%E3%83%BC%E3%82%B8%E5%B1%A5%E6%AD%B4%E3%82%92%E3%82%A4%E3%83%B3%E3%83%9D%E3%83%BC%E3%83%88%E3%81%99%E3%82%8B)

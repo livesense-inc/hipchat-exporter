@@ -37,7 +37,7 @@ module Task
         end
       end
 
-      rooms = Room.parse_csv
+      rooms = ::Room.parse_csv!
 
       if options[:threads]
         Parallel.each(rooms, in_threads: options[:threads]) do |room|
