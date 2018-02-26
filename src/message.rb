@@ -31,23 +31,29 @@ class Message < ActiveRecord::Base
 
       FileUtils.mkdir_p(current_dir(current))
 
-      loop do
-        offset = (page - 1) * Message::BATCH_SIZE
-        messages = Message.includes(:room).where(exported_at: nil).order(:sent_at).offset(offset).limit(Message::BATCH_SIZE)
+      Message.transaction do
+        loop do
+          offset = (page - 1) * Message::BATCH_SIZE
+          messages = Message.includes(:room).where(exported_at: nil).order(:sent_at).offset(offset).limit(Message::BATCH_SIZE)
 
-        CSV.open(csv_path(current_dir: current_dir(current), page: page), 'w') do |csv|
-          messages.each do |message|
-            csv << [message.sent_at.to_i, message.room.name, message.sender_name, message.body]
-            message.update(exported_at: current)
+          CSV.open(csv_path(current_dir: current_dir(current), page: page), 'w') do |csv|
+            messages.each do |message|
+              csv << [message.sent_at.to_i, message.room.name, message.sender_name, message.body]
+              message.update(exported_at: current)
+            end
+          end
+
+          if messages.count < Message::BATCH_SIZE
+            break
+          else
+            page += 1
           end
         end
-
-        if messages.count < Message::BATCH_SIZE
-          break
-        else
-          page += 1
-        end
       end
+
+    rescue => exception
+      FileUtils.rm_rf(current_dir(current)) if Dir.exist?(current_dir(current))
+      raise exception
     end
 
     def dist_dir
