@@ -28,6 +28,7 @@ class Message < ActiveRecord::Base
     def export_csv
       current = Time.current
       page = 1
+      messages_count = Message.where(exported_at: nil).count
 
       FileUtils.mkdir_p(current_dir(current))
 
@@ -50,6 +51,8 @@ class Message < ActiveRecord::Base
           end
         end
       end
+
+      messages_count
 
     rescue => exception
       FileUtils.rm_rf(current_dir(current)) if Dir.exist?(current_dir(current))

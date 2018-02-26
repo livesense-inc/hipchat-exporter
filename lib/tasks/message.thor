@@ -11,9 +11,9 @@ module Task
 
       say 'Exporting messages to CSV files ...'
 
-      ::Message.export_csv
+      messages_count = ::Message.export_csv
 
-      say 'Messages are exported to CSV files'
+      say "#{messages_count} messages are exported to CSV files"
     end
 
     desc 'clear', 'Remove messages CSV files'

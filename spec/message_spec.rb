@@ -19,5 +19,9 @@ describe Message do
         Message.export_csv
       }.to change { Message.last.exported_at }
     end
+
+    it 'returns messages count' do
+      expect(Message.export_csv).to be > 0
+    end
   end
 end
