@@ -13,5 +13,11 @@ describe Message do
         Message.export_csv
       }.to change { Dir[File.join(Message.dist_dir, '**/messages_*.csv')].size }
     end
+
+    it 'saves exported_at to messages' do
+      expect {
+        Message.export_csv
+      }.to change { Message.last.exported_at }
+    end
   end
 end
