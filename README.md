@@ -66,6 +66,12 @@ The messages CSV files are exported to `dist` directory.
 * [Import message history – Slack Help Center](https://get.slack.help/hc/en-us/articles/201748703-Import-message-history)
 * [メッセージ履歴をインポートする（Japanese）](https://get.slack.help/hc/ja/articles/201748703-%E3%83%A1%E3%83%83%E3%82%BB%E3%83%BC%E3%82%B8%E5%B1%A5%E6%AD%B4%E3%82%92%E3%82%A4%E3%83%B3%E3%83%9D%E3%83%BC%E3%83%88%E3%81%99%E3%82%8B)
 
+### Other (show task list)
+
+```
+bundle exec thor -T
+```
+
 ## Setup
 
 ```
@@ -101,4 +107,14 @@ bundle exec pry
 
 ```
 bundle exec rspec
+```
+
+## Other
+
+### Reset the database
+
+db:reset -> db:drop && db:create && db:migarete
+
+```
+bundle exec rake db:reset
 ```
