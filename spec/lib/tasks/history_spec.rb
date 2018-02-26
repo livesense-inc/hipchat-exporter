@@ -4,7 +4,7 @@ describe Task::History do
     let!(:room2) { create(:room, id: 4337418) }
 
     after do
-      FileUtils.rm_r(Dir[File.join(History.rooms_dir, '*')])
+      FileUtils.rm_rf(Dir[File.join(History.rooms_dir, '*')])
     end
 
     context 'when theads option is NOT set' do

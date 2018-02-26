@@ -8,7 +8,7 @@ describe HistoryExporter do
     let(:to) { Time.zone.local(2017, 11, 7).end_of_day }
 
     after do
-      FileUtils.rm_r(Dir[File.join(History.rooms_dir, '*')])
+      FileUtils.rm_rf(Dir[File.join(History.rooms_dir, '*')])
     end
 
     it 'exports room history to JSON files' do
@@ -23,7 +23,7 @@ describe HistoryExporter do
     let(:to) { Time.zone.local(2018, 1, 2).end_of_day }
 
     after do
-      FileUtils.rm_r(Dir[File.join(History.rooms_dir, '*')])
+      FileUtils.rm_rf(Dir[File.join(History.rooms_dir, '*')])
     end
 
     it 'exports room history to JSON file' do
