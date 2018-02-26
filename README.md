@@ -91,6 +91,14 @@ cp rooms.csv.example rooms.csv
 
 Fill room_id and room_name in `rooms.csv` (room_name is optional)
 
+## Reset
+
+db:reset -> db:drop && db:create && db:migarete
+
+```
+bundle exec rake db:reset
+```
+
 ## Debugging
 
 ```
