@@ -16,7 +16,7 @@ module Task
     desc 'map', 'Map room names in CSV file and room ids in DB'
     method_option :force, type: :boolean, default: false, desc: 'Skip asking questions'
     def map
-      csv_data = CSV.read(File.join(HipChatExporter::ROOT_PATH, 'room_names.csv'), headers: false)
+      csv_data = CSV.read(room_names_csv_path, headers: false)
       csv_data.each do |row|
         room_name = row[0]
         if room = ::Room.find_by(name: room_name)
@@ -32,6 +32,14 @@ module Task
 
       def say_abort
         say 'Task is aborted'
+      end
+
+      def room_names_csv_path
+        if ENV['ENV'] == 'test'
+          File.join(HipChatExporter::ROOT_PATH, 'spec/room_names.csv')
+        else
+          File.join(HipChatExporter::ROOT_PATH, 'room_names.csv')
+        end
       end
     end
   end
