@@ -13,5 +13,6 @@
 /vendor/
 
 /.env
+/room_names.csv
 /rooms.csv
 /spec/examples.txt
