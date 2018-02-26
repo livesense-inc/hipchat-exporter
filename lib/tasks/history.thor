@@ -57,7 +57,7 @@ module Task
         return say_abort
       end
 
-      FileUtils.rm_r(rooms_dir) if File.exist?(rooms_dir)
+      FileUtils.rm_rf(rooms_dir) if File.exist?(rooms_dir)
       say 'Room history JSON files are removed'
     end
 

@@ -5,7 +5,7 @@ describe Task::Message do
     end
 
     after do
-      FileUtils.rm_r(Dir[File.join(Message.dist_dir, '*')])
+      FileUtils.rm_rf(Dir[File.join(Message.dist_dir, '*')])
     end
 
     it 'exports messages to CSV files' do
