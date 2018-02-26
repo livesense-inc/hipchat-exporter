@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 1519218735) do
+ActiveRecord::Schema.define(version: 1519612260) do
 
   create_table "messages", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4" do |t|
     t.integer "room_id", null: false
@@ -22,7 +22,8 @@ ActiveRecord::Schema.define(version: 1519218735) do
     t.datetime "sent_at", precision: 6, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["sent_at"], name: "index_messages_on_sent_at"
+    t.datetime "exported_at"
+    t.index ["exported_at", "sent_at"], name: "index_messages_on_exported_at_and_sent_at"
     t.index ["uuid"], name: "index_messages_on_uuid", unique: true
   end
 
