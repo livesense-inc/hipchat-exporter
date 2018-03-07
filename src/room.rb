@@ -15,9 +15,9 @@ class Room < ActiveRecord::Base
 
   class << self
     def parse_csv!
-      CSV.open(rooms_csv_path).map do |row|
-        Room.find(row[0].strip)
-      end
+      CSV.open(rooms_csv_path).map { |row|
+        Room.find(row[0].strip) if row[0].present?
+      }.compact
     end
 
     def rooms_csv_path
