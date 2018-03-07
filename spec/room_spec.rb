@@ -3,9 +3,9 @@ describe Room do
     let!(:room1) { create(:room, id: 1944196) }
     let!(:room2) { create(:room, id: 4337418) }
 
-    it 'parse csv file and find rooms' do
+    it 'parses csv file and find rooms' do
       rooms = Room.parse_csv!
-      expect(rooms.first).to be_an_instance_of(Room)
+      expect(rooms.all? { |room| room.class == Room }).to be_truthy
     end
   end
 end
