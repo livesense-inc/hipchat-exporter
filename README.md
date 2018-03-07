@@ -118,3 +118,16 @@ db:reset -> db:drop && db:create && db:migarete
 ```
 bundle exec rake db:reset
 ```
+
+### Map room names in CSV file and rooms in DB and show room id list
+
+```
+cp room_names.csv.example room_names.csv
+```
+
+Fill room names `room_names.csv`
+
+```
+bundle exec thor task:room:export
+bundle exec thor task:room:map
+```

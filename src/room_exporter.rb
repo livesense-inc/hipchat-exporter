@@ -35,7 +35,7 @@ class RoomExporter
       :'start-index' => offset,
       :'max-results' => RoomExporter::MAX_RESULTS,
       :'include-private' => true,
-      :'include-archived' => false,
+      :'include-archived' => true,
     )
   end
 
