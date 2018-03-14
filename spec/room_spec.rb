@@ -18,5 +18,40 @@ describe Room do
       let(:name) { 'MyRoom(foo)' }
       it { is_expected.to eq 'MyRoom-foo-' }
     end
+
+    context 'when name includes（）' do
+      let(:name) { 'MyRoom（foo）' }
+      it { is_expected.to eq 'MyRoom-foo-' }
+    end
+
+    context 'when name includes【】' do
+      let(:name) { 'MyRoom【foo】' }
+      it { is_expected.to eq 'MyRoom-foo-' }
+    end
+
+    context 'when name includes " "' do
+      let(:name) { 'MyRoom foo' }
+      it { is_expected.to eq 'MyRoom-foo' }
+    end
+
+    context 'when name includes "　"' do
+      let(:name) { 'MyRoom　foo' }
+      it { is_expected.to eq 'MyRoom-foo' }
+    end
+
+    context 'when name includes "・"' do
+      let(:name) { 'MyRoom・foo' }
+      it { is_expected.to eq 'MyRoom-foo' }
+    end
+
+    context 'when name includes "/"' do
+      let(:name) { 'MyRoom/foo' }
+      it { is_expected.to eq 'MyRoom-foo' }
+    end
+
+    context 'when name includes "＿"' do
+      let(:name) { 'MyRoom＿foo' }
+      it { is_expected.to eq 'MyRoom_foo' }
+    end
   end
 end
