@@ -16,17 +16,17 @@ describe Room do
 
     context 'when name includes ()' do
       let(:name) { 'MyRoom(foo)' }
-      it { is_expected.to eq 'MyRoom-foo-' }
+      it { is_expected.to eq 'MyRoom-foo' }
     end
 
     context 'when name includes（）' do
       let(:name) { 'MyRoom（foo）' }
-      it { is_expected.to eq 'MyRoom-foo-' }
+      it { is_expected.to eq 'MyRoom-foo' }
     end
 
     context 'when name includes【】' do
       let(:name) { 'MyRoom【foo】' }
-      it { is_expected.to eq 'MyRoom-foo-' }
+      it { is_expected.to eq 'MyRoom-foo' }
     end
 
     context 'when name includes " "' do
@@ -52,6 +52,21 @@ describe Room do
     context 'when name includes "＿"' do
       let(:name) { 'MyRoom＿foo' }
       it { is_expected.to eq 'MyRoom_foo' }
+    end
+
+    context 'when name includes - at the beginning' do
+      let(:name) { '【foo】MyRoom' }
+      it { is_expected.to eq 'foo-MyRoom' }
+    end
+
+    context 'when name includes - at the end' do
+      let(:name) { 'MyRoom【foo】' }
+      it { is_expected.to eq 'MyRoom-foo' }
+    end
+
+    context 'when name includes \-+' do
+      let(:name) { '---MyRoom---foo---' }
+      it { is_expected.to eq 'MyRoom-foo' }
     end
   end
 end
