@@ -8,4 +8,65 @@ describe Room do
       expect(rooms.all? { |room| room.class == Room }).to be_truthy
     end
   end
+
+  describe '#name_for_slack' do
+    let(:room) { build(:room, name: name) }
+
+    subject { room.name_for_slack }
+
+    context 'when name includes ()' do
+      let(:name) { 'MyRoom(foo)' }
+      it { is_expected.to eq 'MyRoom-foo' }
+    end
+
+    context 'when name includes（）' do
+      let(:name) { 'MyRoom（foo）' }
+      it { is_expected.to eq 'MyRoom-foo' }
+    end
+
+    context 'when name includes【】' do
+      let(:name) { 'MyRoom【foo】' }
+      it { is_expected.to eq 'MyRoom-foo' }
+    end
+
+    context 'when name includes " "' do
+      let(:name) { 'MyRoom foo' }
+      it { is_expected.to eq 'MyRoom-foo' }
+    end
+
+    context 'when name includes "　"' do
+      let(:name) { 'MyRoom　foo' }
+      it { is_expected.to eq 'MyRoom-foo' }
+    end
+
+    context 'when name includes "・"' do
+      let(:name) { 'MyRoom・foo' }
+      it { is_expected.to eq 'MyRoom-foo' }
+    end
+
+    context 'when name includes "/"' do
+      let(:name) { 'MyRoom/foo' }
+      it { is_expected.to eq 'MyRoom-foo' }
+    end
+
+    context 'when name includes "＿"' do
+      let(:name) { 'MyRoom＿foo' }
+      it { is_expected.to eq 'MyRoom_foo' }
+    end
+
+    context 'when name includes - at the beginning' do
+      let(:name) { '【foo】MyRoom' }
+      it { is_expected.to eq 'foo-MyRoom' }
+    end
+
+    context 'when name includes - at the end' do
+      let(:name) { 'MyRoom【foo】' }
+      it { is_expected.to eq 'MyRoom-foo' }
+    end
+
+    context 'when name includes \-+' do
+      let(:name) { '---MyRoom---foo---' }
+      it { is_expected.to eq 'MyRoom-foo' }
+    end
+  end
 end

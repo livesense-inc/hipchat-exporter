@@ -28,4 +28,13 @@ class Room < ActiveRecord::Base
       end
     end
   end
+
+  def name_for_slack
+    _name = self.name.gsub(/[\(\)\/<>＜＞:;（）【】@＠・⇔\&＆\s　›´ω`‹๑•̀ㅁ•́๑✧Φ+＋−⇄~〜↗︎]/, '-')
+    _name = _name.gsub(/[＿]/, '_')
+    _name = _name.gsub(/\-+/, '-')
+    _name = _name.gsub(/\A\-+/, '')
+    _name = _name.gsub(/\-+\z/, '')
+    _name
+  end
 end
