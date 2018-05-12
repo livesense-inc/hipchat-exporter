@@ -134,3 +134,21 @@ Fill room names `room_names.csv`
 bundle exec thor task:room:export
 bundle exec thor task:room:map
 ```
+
+### Show tasks list
+
+```
+bundle exec thor -T
+```
+
+```
+task
+----
+thor task:history:clear   # Remove room history JSON files
+thor task:history:export  # Export the history of rooms to JSON files
+thor task:history:save    # Save the history of rooms to DB
+thor task:message:clear   # Remove messages CSV files
+thor task:message:export  # Export the messages to CSV files
+thor task:room:export     # Export rooms and save them to DB
+thor task:room:map        # Map room names in CSV file and room ids in DB
+```
