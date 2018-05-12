@@ -18,6 +18,9 @@ Export the history (messages) of rooms from HipChat.
     * [MySQL :: MySQL 5.6 Reference Manual :: 11.3.6 Fractional Seconds in Time Values](https://dev.mysql.com/doc/refman/5.6/en/fractional-seconds.html)
     * [MySQL :: MySQL 5.6 リファレンスマニュアル :: 11.3.6 時間値での小数秒](https://dev.mysql.com/doc/refman/5.6/ja/fractional-seconds.html)
   * utf8mb4, why? -> The messages in HipChat include emoji
+* HipChat API Token:
+
+![image](https://user-images.githubusercontent.com/634357/39954552-b3398b28-55fc-11e8-90fe-93050a81ce61.png)
 
 ## Usage
 
