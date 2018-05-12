@@ -23,7 +23,7 @@ module Task
         return say_abort
       end
 
-      FileUtils.rm_f(Dir[File.join(::Message.dist_dir, '*')])
+      FileUtils.rm_rf(Dir[File.join(::Message.dist_dir, '*')])
 
       say 'Message CSV files are removed'
     end
