@@ -78,6 +78,10 @@ class Message < ActiveRecord::Base
     end
   end
 
+  def from_bot?
+    self.sender_name == 'unknown'
+  end
+
   def ym
     self.sent_at.strftime('%Y-%m')
   end

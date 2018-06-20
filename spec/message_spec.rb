@@ -27,6 +27,22 @@ describe Message do
     end
   end
 
+  describe '#from_bot?' do
+    context 'sender_name is unknown' do
+      let(:message) { build(:message, sender_name: 'unknown') }
+      it { expect(message.from_bot?).to be_truthy }
+    end
+
+    context 'sender_name is NOT unknown' do
+      let(:message) { build(:message, sender_name: 'somebody') }
+      it { expect(message.from_bot?).to be_falsey }
+    end
+
+    it 'returns sent_at as YYYY-MM' do
+      expect(message.ym).to match /\A\d{4}-\d{2}\z/
+    end
+  end
+
   describe '#ym' do
     it 'returns sent_at as YYYY-MM' do
       expect(message.ym).to match /\A\d{4}-\d{2}\z/
