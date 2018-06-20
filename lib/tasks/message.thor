@@ -28,6 +28,35 @@ module Task
       say 'Message CSV files are removed'
     end
 
+    desc 'stats', 'Stats of messages'
+    method_option :room_id, type: :numeric, desc: 'Target room id', required: true
+    def stats
+      result = {}
+
+      ::Message.where(room_id: options[:room_id]).find_each do |message|
+        next if message.from_bot?
+        next if message.body.blank?
+
+        if result[message.ym]
+          if message.reaction?
+            result[message.ym][:reaction] += 1
+          else
+            result[message.ym][:message] += 1
+          end
+        else
+          result[message.ym] = { message: 0, reaction: 0 }
+        end
+      end
+
+      result.sort.each do |ym, count|
+        puts "#{ym} => { message: #{count[:message]}, reaction: #{count[:reaction]}, sum: #{count[:message] + count[:reaction]} }"
+      end
+
+      result.sort.each do |ym, count|
+        puts "#{ym}, #{count[:message]}, #{count[:reaction]}, #{count[:message] + count[:reaction]}"
+      end
+    end
+
     no_commands do
       private
 
