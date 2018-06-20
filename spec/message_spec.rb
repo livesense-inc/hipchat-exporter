@@ -45,7 +45,7 @@ describe Message do
 
   describe '#reaction?' do
     context 'body is reaction' do
-      let(:message) { build(:message, body: '(yeah)') }
+      let(:message) { build(:message, body: "(yeah)\n") }
       it { expect(message.reaction?).to be_truthy }
     end
 

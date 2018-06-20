@@ -83,7 +83,7 @@ class Message < ActiveRecord::Base
   end
 
   def reaction?
-    self.body.present? && self.body.match(/\A\(\w+\)\z/)
+    self.body.present? && self.body.strip.match(/\A\(\w+\)\z/)
   end
 
   def ym
