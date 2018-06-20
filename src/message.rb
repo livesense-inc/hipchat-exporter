@@ -77,4 +77,8 @@ class Message < ActiveRecord::Base
       File.join(current_dir, "messages_#{page}.csv")
     end
   end
+
+  def ym
+    self.sent_at.strftime('%Y-%m')
+  end
 end

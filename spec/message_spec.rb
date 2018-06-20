@@ -1,4 +1,6 @@
 describe Message do
+  let(:message) { build(:message) }
+
   describe '.export_csv' do
     before do
       create_list(:message, 2)
@@ -22,6 +24,12 @@ describe Message do
 
     it 'returns messages count' do
       expect(Message.export_csv).to be > 0
+    end
+  end
+
+  describe '#ym' do
+    it 'returns sent_at as YYYY-MM' do
+      expect(message.ym).to match /\A\d{4}-\d{2}\z/
     end
   end
 end
