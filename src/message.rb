@@ -82,6 +82,10 @@ class Message < ActiveRecord::Base
     self.sender_name == 'unknown'
   end
 
+  def reaction?
+    self.body.present? && self.body.match(/\A\(\w+\)\z/)
+  end
+
   def ym
     self.sent_at.strftime('%Y-%m')
   end

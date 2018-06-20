@@ -43,6 +43,18 @@ describe Message do
     end
   end
 
+  describe '#reaction?' do
+    context 'body is reaction' do
+      let(:message) { build(:message, body: '(yeah)') }
+      it { expect(message.reaction?).to be_truthy }
+    end
+
+    context 'body is NOT reaction' do
+      let(:message) { build(:message, body: 'Hello, world') }
+      it { expect(message.reaction?).to be_falsey }
+    end
+  end
+
   describe '#ym' do
     it 'returns sent_at as YYYY-MM' do
       expect(message.ym).to match /\A\d{4}-\d{2}\z/
