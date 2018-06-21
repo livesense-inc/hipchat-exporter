@@ -77,4 +77,16 @@ class Message < ActiveRecord::Base
       File.join(current_dir, "messages_#{page}.csv")
     end
   end
+
+  def from_bot?
+    self.sender_name == 'unknown'
+  end
+
+  def reaction?
+    self.body.present? && self.body.strip.match(/\A\(\w+\)\z/)
+  end
+
+  def ym
+    self.sent_at.strftime('%Y-%m')
+  end
 end
